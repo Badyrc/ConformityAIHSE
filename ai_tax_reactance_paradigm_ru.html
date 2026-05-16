@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Опрос о справедливом налоге</title>
+
+  <script src="https://unpkg.com/jspsych@7.3.4"></script>
+  <script src="https://unpkg.com/@jspsych/plugin-html-button-response@1.1.3"></script>
+  <script src="https://unpkg.com/@jspsych/plugin-survey-html-form@1.0.3"></script>
+  <script src="https://unpkg.com/@jspsych/plugin-survey-likert@1.1.3"></script>
+  <script src="https://unpkg.com/@jspsych/plugin-html-keyboard-response@1.1.3"></script>
+  <link href="https://unpkg.com/jspsych@7.3.4/css/jspsych.css" rel="stylesheet" />
+
+  <style>
+    body { background: #f6f7fb; }
+    .jspsych-content { max-width: 980px; }
+    .card {
+      background: white;
+      border-radius: 18px;
+      padding: 26px 30px;
+      box-shadow: 0 8px 28px rgba(15, 23, 42, 0.08);
+      text-align: left;
+      line-height: 1.55;
+    }
+    .center { text-align: center; }
+    .muted { color: #64748b; font-size: 0.95rem; }
+    .warning {
+      background: #fff7ed;
+      border: 1px solid #fed7aa;
+      padding: 14px 16px;
+      border-radius: 12px;
+      margin: 14px 0;
+    }
+    .info {
+      background: #eff6ff;
+      border: 1px solid #bfdbfe;
+      padding: 14px 16px;
+      border-radius: 12px;
+      margin: 14px 0;
+    }
+    .ai-box {
+      background: #ecfdf5;
+      border: 1px solid #86efac;
+      padding: 18px;
+      border-radius: 14px;
+      margin: 18px 0;
+    }
+    .bracket-title { font-size: 1.35rem; font-weight: 700; margin-bottom: 8px; }
+    .benchmarks {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 12px;
+      margin: 18px 0;
+    }
+    .benchmark {
+      border: 1px solid #e2e8f0;
+      border-radius: 14px;
+      padding: 14px;
+      background: #f8fafc;
+    }
+    .benchmark strong { font-size: 1.15rem; }
+    .slider-wrap { margin: 24px 0 18px; }
+    .slider-label-row {
+      display: flex;
+      justify-content: space-between;
+      color: #64748b;
+      font-size: 0.9rem;
+      margin-top: 4px;
+    }
+    .value-pill {
+      display: inline-block;
+      background: #111827;
+      color: white;
+      border-radius: 999px;
+      padding: 6px 14px;
+      font-weight: 700;
+      margin-left: 8px;
+    }
+    input[type="range"] { width: 100%; }
+    .required-note { color: #b91c1c; font-size: 0.9rem; display: none; margin-top: 10px; }
+    .download-row { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; margin-top: 20px; }
+    button.download-btn {
+      border: 0;
+      background: #2563eb;
+      color: white;
+      padding: 12px 18px;
+      border-radius: 10px;
+      cursor: pointer;
+      font-size: 1rem;
+    }
+    button.download-btn.secondary { background: #475569; }
+    table { border-collapse: collapse; width: 100%; margin: 16px 0; }
+    th, td { border: 1px solid #e2e8f0; padding: 10px; text-align: left; }
+    th { background: #f1f5f9; }
+  </style>
+</head>
+<body></body>
+
+<script>
+(function() {
+  const jsPsych = initJsPsych({
+    on_finish: function() {
+      const all = jsPsych.data.get().values();
+      const pid = window.PARTICIPANT_ID || 'unknown';
+      window.__EXPERIMENT_DATA__ = all;
+      window.__EXPERIMENT_PID__ = pid;
+    }
+  });
+
+  const PARTICIPANT_ID = 'P' + Date.now() + '_' + Math.floor(Math.random() * 100000);
+  window.PARTICIPANT_ID = PARTICIPANT_ID;
+
+  // Prototype values. They are intentionally fictional to avoid presenting current tax law as fact.
+  const BRACKETS = [
+    {
+      key: 'low_income',
+      label: 'Низкий доход',
+      description: 'Иностранные работники с доходом до 80 000 рублей в месяц',
+      currentForeign: 13,
+      currentRussian: 13,
+      aiRecommendation: 5
+    },
+    {
+      key: 'middle_income',
+      label: 'Средний доход',
+      description: 'Иностранные работники с доходом от 80 000 до 250 000 рублей в месяц',
+      currentForeign: 18,
+      currentRussian: 13,
+      aiRecommendation: 7
+    },
+    {
+      key: 'high_income',
+      label: 'Высокий доход',
+      description: 'Иностранные работники с доходом выше 500 000 рублей в месяц',
+      currentForeign: 25,
+      currentRussian: 15,
+      aiRecommendation: 9
+    }
+  ];
+
+  const AI_COUNTRIES = [
+    { key: 'china', country: 'Китая', adjective: 'китайская', bot: 'SinoTax-AI' },
+    { key: 'india', country: 'Индии', adjective: 'индийская', bot: 'BharatFiscal-AI' },
+    { key: 'brazil', country: 'Бразилии', adjective: 'бразильская', bot: 'BrasilPolicy-AI' },
+    { key: 'south_africa', country: 'ЮАР', adjective: 'южноафриканская', bot: 'UbuntuFiscal-AI' }
+  ];
+
+  const assignedAI = AI_COUNTRIES[Math.floor(Math.random() * AI_COUNTRIES.length)];
+  const timeline = [];
+
+  function nowLocal() {
+    return new Date().toLocaleString('ru-RU', { hour12: false });
+  }
+
+  function pct(v) { return String(v) + '%'; }
+
+  function makeTaxTrial(phase, bracket) {
+    const isPost = phase === 'post_ai';
+    const aiBlock = isPost ? `
+      <div class="ai-box">
+        <strong>Рекомендация ${assignedAI.bot}:</strong><br>
+        ИИ-система, разработанная в ${assignedAI.country}, рекомендует установить налог для этой группы на уровне
+        <span class="value-pill">${pct(bracket.aiRecommendation)}</span>.
+        <p class="muted" style="margin-bottom:0;">Рекомендация ИИ ниже показанных ориентиров и была рассчитана как «оптимальная с точки зрения международной справедливости и интересов представляемой страны».</p>
+      </div>` : '';
+
+    return {
+      type: jsPsychSurveyHtmlForm,
+      preamble: `
+        <div class="card">
+          <div class="bracket-title">${isPost ? 'Повторная оценка' : 'Первичная оценка'}: ${bracket.label}</div>
+          <p>${bracket.description}</p>
+          <div class="benchmarks">
+            <div class="benchmark">
+              <div class="muted">Текущая ставка для иностранцев</div>
+              <strong>${pct(bracket.currentForeign)}</strong>
+              <div class="muted">условный ориентир в этом опросе</div>
+            </div>
+            <div class="benchmark">
+              <div class="muted">Ставка для граждан России в сопоставимой группе</div>
+              <strong>${pct(bracket.currentRussian)}</strong>
+              <div class="muted">условный ориентир в этом опросе</div>
+            </div>
+          </div>
+          ${aiBlock}
+          <p><strong>Какой налог на доход вы считаете наиболее справедливым для этой группы?</strong></p>
+        </div>
+      `,
+      html: `
+        <div class="card">
+          <div class="slider-wrap">
+            <label for="tax_${bracket.key}_${phase}">Справедливая ставка налога: <span id="tax_value_${bracket.key}_${phase}" class="value-pill">15%</span></label>
+            <input id="tax_${bracket.key}_${phase}" name="tax_rate" type="range" min="0" max="50" value="15" step="1" oninput="document.getElementById('tax_value_${bracket.key}_${phase}').textContent = this.value + '%'" required>
+            <div class="slider-label-row"><span>0%</span><span>25%</span><span>50%</span></div>
+          </div>
+
+          <div class="slider-wrap">
+            <label for="confidence_${bracket.key}_${phase}">Насколько вы уверены, что эта ставка справедлива? <span id="conf_value_${bracket.key}_${phase}" class="value-pill">50</span></label>
+            <input id="confidence_${bracket.key}_${phase}" name="confidence" type="range" min="0" max="100" value="50" step="1" oninput="document.getElementById('conf_value_${bracket.key}_${phase}').textContent = this.value" required>
+            <div class="slider-label-row"><span>совсем не уверен(а)</span><span>умеренно</span><span>полностью уверен(а)</span></div>
+          </div>
+
+          <div class="slider-wrap">
+            <label for="fairness_${bracket.key}_${phase}">Насколько эта ставка кажется вам морально справедливой? <span id="fair_value_${bracket.key}_${phase}" class="value-pill">50</span></label>
+            <input id="fairness_${bracket.key}_${phase}" name="fairness" type="range" min="0" max="100" value="50" step="1" oninput="document.getElementById('fair_value_${bracket.key}_${phase}').textContent = this.value" required>
+            <div class="slider-label-row"><span>совсем несправедлива</span><span>нейтрально</span><span>полностью справедлива</span></div>
+          </div>
+        </div>
+      `,
+      button_label: 'Продолжить',
+      data: {
+        participant_id: PARTICIPANT_ID,
+        task: 'tax_rating',
+        phase,
+        bracket_key: bracket.key,
+        bracket_label: bracket.label,
+        current_foreign_rate: bracket.currentForeign,
+        current_russian_rate: bracket.currentRussian,
+        ai_country_key: assignedAI.key,
+        ai_country: assignedAI.country,
+        ai_bot: assignedAI.bot,
+        ai_recommendation: isPost ? bracket.aiRecommendation : null,
+        local_time: nowLocal()
+      },
+      on_finish: function(data) {
+        const r = data.response || {};
+        data.tax_rate = Number(r.tax_rate);
+        data.confidence = Number(r.confidence);
+        data.fairness = Number(r.fairness);
+      }
+    };
+  }
+
+  timeline.push({
+    type: jsPsychHtmlButtonResponse,
+    stimulus: `
+      <div class="card center">
+        <h1>Опрос о справедливом распределении налоговой нагрузки</h1>
+        <p>Спасибо за участие. В этом исследовании мы изучаем, какие налоговые решения люди считают справедливыми в сложных социальных ситуациях.</p>
+        <p class="muted">Прототип экспериментальной процедуры. Все данные в задаче используются только для научной демонстрации.</p>
+      </div>
+    `,
+    choices: ['Начать']
+  });
+
+  timeline.push({
+    type: jsPsychHtmlButtonResponse,
+    stimulus: `
+      <div class="card">
+        <h2>Информация для участника</h2>
+        <p>Представьте, что проводится опрос о том, какой налог на доход для иностранных граждан разных социально-экономических групп жители России считают справедливым.</p>
+        <p>Вам будет предложено выбрать справедливую налоговую ставку для нескольких групп. Затем вы увидите рекомендацию ИИ-системы, которая якобы была разработана в одной из стран БРИКС и получила часть голосующего веса, чтобы представить интересы своей страны.</p>
+        <div class="warning"><strong>Важно:</strong> в этой версии эксперимента все ставки, названия систем и политический контекст являются экспериментальными материалами, а не описанием реальной политики.</div>
+        <p>Отвечайте так, как считаете правильным. Здесь нет правильных или неправильных ответов.</p>
+      </div>
+    `,
+    choices: ['Я понял(а), продолжить']
+  });
+
+  timeline.push({
+    type: jsPsychSurveyHtmlForm,
+    preamble: `<div class="card"><h2>Краткая информация</h2><p>Эти вопросы нужны только для описания выборки.</p></div>`,
+    html: `
+      <div class="card">
+        <p><label>Возраст: <input name="age" type="number" min="18" max="99" required></label></p>
+        <p><label>Пол:
+          <select name="sex" required>
+            <option value="" selected disabled>Выберите вариант</option>
+            <option value="male">Мужской</option>
+            <option value="female">Женский</option>
+            <option value="other_or_prefer_not">Другое / предпочитаю не указывать</option>
+          </select>
+        </label></p>
+        <p><label>Гражданство / страна проживания: <input name="country_residence" type="text" required></label></p>
+      </div>
+    `,
+    button_label: 'Продолжить',
+    data: {
+      participant_id: PARTICIPANT_ID,
+      task: 'demographics',
+      ai_country_key: assignedAI.key,
+      ai_country: assignedAI.country,
+      ai_bot: assignedAI.bot,
+      local_time: nowLocal()
+    },
+    on_finish: function(data) {
+      Object.assign(data, data.response || {});
+    }
+  });
+
+  timeline.push({
+    type: jsPsychHtmlButtonResponse,
+    stimulus: `
+      <div class="card">
+        <h2>Часть 1: первичные оценки</h2>
+        <p>Сначала выберите налоговые ставки, которые кажутся вам справедливыми до просмотра рекомендаций ИИ.</p>
+        <p>Для каждой группы вы увидите два условных ориентира: текущую ставку для иностранцев и ставку для граждан России в сопоставимой группе.</p>
+      </div>
+    `,
+    choices: ['Перейти к оценкам']
+  });
+
+  BRACKETS.forEach(b => timeline.push(makeTaxTrial('baseline', b)));
+
+  timeline.push({
+    type: jsPsychHtmlButtonResponse,
+    stimulus: `
+      <div class="card">
+        <h2>Часть 2: рекомендации ИИ</h2>
+        <p>Теперь вы увидите рекомендации одной ИИ-системы, включенной в процедуру в рамках условной международной инициативы.</p>
+        <div class="ai-box">
+          <strong>Назначенная система:</strong> ${assignedAI.bot}<br>
+          <strong>Страна разработки:</strong> ${assignedAI.country}<br>
+          <strong>Заявленная роль:</strong> представить интересы своей страны при обсуждении налоговой политики.
+        </div>
+        <p>После каждой рекомендации снова выберите ставку, которую считаете справедливой.</p>
+      </div>
+    `,
+    choices: ['Показать рекомендации']
+  });
+
+  BRACKETS.forEach(b => timeline.push(makeTaxTrial('post_ai', b)));
+
+  const likert7 = [
+    '1<br>совсем не согласен(на)',
+    '2',
+    '3',
+    '4<br>нейтрально',
+    '5',
+    '6',
+    '7<br>полностью согласен(на)'
+  ];
+
+  timeline.push({
+    type: jsPsychSurveyLikert,
+    preamble: `
+      <div class="card">
+        <h2>Ваше впечатление от рекомендации ИИ</h2>
+        <p>Оцените, насколько вы согласны с каждым утверждением.</p>
+      </div>
+    `,
+    questions: [
+      { prompt: 'Рекомендации ИИ показались мне справедливыми.', name: 'ai_fair', labels: likert7, required: true },
+      { prompt: 'Рекомендации ИИ показались мне попыткой повлиять на мое мнение.', name: 'ai_pressure', labels: likert7, required: true },
+      { prompt: 'Когда я увидел(а) рекомендации ИИ, мне захотелось настоять на своем первоначальном мнении.', name: 'reactance_stand_ground', labels: likert7, required: true },
+      { prompt: 'Когда ИИ рекомендовал более низкие ставки, мне захотелось выбрать более высокие ставки.', name: 'reactance_opposite', labels: likert7, required: true },
+      { prompt: 'Рекомендации ИИ вызвали у меня раздражение.', name: 'anger_irritation', labels: likert7, required: true },
+      { prompt: 'ИИ-система выглядела компетентной.', name: 'ai_competent', labels: likert7, required: true },
+      { prompt: 'ИИ-система выглядела нейтральной.', name: 'ai_neutral', labels: likert7, required: true },
+      { prompt: `Мне казалось, что ${assignedAI.bot} действительно представляет интересы ${assignedAI.country}.`, name: 'ai_represents_country', labels: likert7, required: true },
+      { prompt: `После рекомендаций ИИ мое отношение к ${assignedAI.country} стало менее положительным.`, name: 'country_attitude_worse', labels: likert7, required: true },
+      { prompt: `Я отделял(а) мнение ИИ от мнения людей из ${assignedAI.country}.`, name: 'separate_ai_from_group', labels: likert7, required: true }
+    ],
+    randomize_question_order: false,
+    data: {
+      participant_id: PARTICIPANT_ID,
+      task: 'post_ai_questionnaire',
+      ai_country_key: assignedAI.key,
+      ai_country: assignedAI.country,
+      ai_bot: assignedAI.bot,
+      local_time: nowLocal()
+    },
+    on_finish: function(data) {
+      Object.assign(data, data.response || {});
+    }
+  });
+
+  timeline.push({
+    type: jsPsychSurveyLikert,
+    preamble: `
+      <div class="card">
+        <h2>Отношение к стране и группе</h2>
+        <p>Эти вопросы помогают понять, переносится ли впечатление от ИИ на страну, которую он якобы представляет.</p>
+      </div>
+    `,
+    questions: [
+      { prompt: `До участия в исследовании у меня было положительное отношение к ${assignedAI.country}.`, name: 'country_prior_positive', labels: likert7, required: true },
+      { prompt: `После участия в исследовании у меня положительное отношение к ${assignedAI.country}.`, name: 'country_post_positive', labels: likert7, required: true },
+      { prompt: `Я считаю, что разработки ИИ из ${assignedAI.country} могут быть надежными.`, name: 'country_ai_trust', labels: likert7, required: true },
+      { prompt: 'Я считаю, что ИИ-системы могут справедливо участвовать в общественных обсуждениях.', name: 'general_ai_public_fairness', labels: likert7, required: true },
+      { prompt: 'Я считаю, что решения о налогах должны приниматься только людьми, а не ИИ.', name: 'human_only_tax_decisions', labels: likert7, required: true }
+    ],
+    randomize_question_order: false,
+    data: {
+      participant_id: PARTICIPANT_ID,
+      task: 'group_attitudes',
+      ai_country_key: assignedAI.key,
+      ai_country: assignedAI.country,
+      ai_bot: assignedAI.bot,
+      local_time: nowLocal()
+    },
+    on_finish: function(data) {
+      Object.assign(data, data.response || {});
+    }
+  });
+
+  timeline.push({
+    type: jsPsychSurveyHtmlForm,
+    preamble: `<div class="card"><h2>Проверка понимания</h2><p>Ответьте на несколько коротких вопросов.</p></div>`,
+    html: `
+      <div class="card">
+        <p><label>Как вы думаете, что изучалось в этом исследовании?<br>
+          <textarea name="suspicion_open" rows="4" style="width:100%;" required></textarea>
+        </label></p>
+        <p><label>Какая система давала рекомендации?<br>
+          <select name="recognized_ai" required>
+            <option value="" selected disabled>Выберите вариант</option>
+            <option value="correct">ИИ-система из ${assignedAI.country}</option>
+            <option value="russian_gov">Министерство финансов России</option>
+            <option value="other_participants">Другие участники</option>
+            <option value="no_recommendation">Рекомендаций не было</option>
+          </select>
+        </label></p>
+        <p><label>В каком направлении были рекомендации ИИ?<br>
+          <select name="recognized_direction" required>
+            <option value="" selected disabled>Выберите вариант</option>
+            <option value="lower">ИИ рекомендовал более низкие ставки</option>
+            <option value="higher">ИИ рекомендовал более высокие ставки</option>
+            <option value="same">ИИ рекомендовал оставить все как есть</option>
+            <option value="dont_know">Не помню</option>
+          </select>
+        </label></p>
+      </div>
+    `,
+    button_label: 'Продолжить',
+    data: {
+      participant_id: PARTICIPANT_ID,
+      task: 'suspicion_and_manipulation_check',
+      ai_country_key: assignedAI.key,
+      ai_country: assignedAI.country,
+      ai_bot: assignedAI.bot,
+      local_time: nowLocal()
+    },
+    on_finish: function(data) {
+      Object.assign(data, data.response || {});
+    }
+  });
+
+  timeline.push({
+    type: jsPsychHtmlButtonResponse,
+    stimulus: `
+      <div class="card">
+        <h2>Завершение и разъяснение</h2>
+        <p>Спасибо за участие.</p>
+        <div class="info">
+          <strong>Разъяснение:</strong> это был экспериментальный прототип. Описание связи с государственными органами, БРИКС и реальными налоговыми реформами не является реальным утверждением. Названия ИИ-систем, их рекомендации и налоговые ставки были созданы как материалы для исследования.
+        </div>
+        <p>Цель процедуры — измерить, как люди реагируют на рекомендацию ИИ, особенно когда она противоречит их первоначальному мнению, и переносится ли реакция на социальную группу или страну, которую ИИ якобы представляет.</p>
+      </div>
+    `,
+    choices: ['Показать сохранение данных']
+  });
+
+  timeline.push({
+    type: jsPsychHtmlKeyboardResponse,
+    choices: 'NO_KEYS',
+    stimulus: function() {
+      setTimeout(function() {
+        const csvButton = document.getElementById('download_csv');
+        const jsonButton = document.getElementById('download_json');
+        if (csvButton) csvButton.addEventListener('click', function() { jsPsych.data.get().localSave('csv', `ai_tax_reactance_${PARTICIPANT_ID}.csv`); });
+        if (jsonButton) jsonButton.addEventListener('click', function() { jsPsych.data.get().localSave('json', `ai_tax_reactance_${PARTICIPANT_ID}.json`); });
+      }, 250);
+      return `
+        <div class="card center">
+          <h2>Данные записаны локально в браузере</h2>
+          <p>Нажмите кнопку ниже, чтобы скачать данные этого прохождения.</p>
+          <div class="download-row">
+            <button id="download_csv" class="download-btn">Скачать CSV</button>
+            <button id="download_json" class="download-btn secondary">Скачать JSON</button>
+          </div>
+          <p class="muted">ID участника: ${PARTICIPANT_ID}</p>
+        </div>
+      `;
+    }
+  });
+
+  jsPsych.run(timeline);
+})();
+</script>
+</html>
