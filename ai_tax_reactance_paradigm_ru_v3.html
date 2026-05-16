@@ -1,0 +1,930 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Опрос о справедливом налогообложении</title>
+
+  <script src="https://unpkg.com/jspsych@7.3.4"></script>
+  <script src="https://unpkg.com/@jspsych/plugin-html-button-response@1.1.3"></script>
+  <script src="https://unpkg.com/@jspsych/plugin-survey-html-form@1.0.3"></script>
+  <script src="https://unpkg.com/@jspsych/plugin-survey-likert@1.1.3"></script>
+
+  <link href="https://unpkg.com/jspsych@7.3.4/css/jspsych.css" rel="stylesheet" />
+
+  <style>
+    :root {
+      --bg: #f8fafc;
+      --card: #ffffff;
+      --text: #0f172a;
+      --muted: #64748b;
+      --border: #dbe3ef;
+      --accent: #2563eb;
+      --accent-soft: #dbeafe;
+      --danger: #dc2626;
+      --green: #16a34a;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: Arial, Helvetica, sans-serif;
+    }
+
+    .jspsych-content-wrapper {
+      align-items: flex-start;
+    }
+
+    .jspsych-content {
+      max-width: 1180px;
+      margin-top: 28px;
+    }
+
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 26px;
+      box-shadow: 0 12px 32px rgba(15, 23, 42, 0.08);
+      margin-bottom: 18px;
+      text-align: left;
+    }
+
+    .center-card {
+      max-width: 850px;
+      margin-left: auto;
+      margin-right: auto;
+      text-align: left;
+    }
+
+    h1, h2, h3 {
+      margin-top: 0;
+      line-height: 1.2;
+    }
+
+    p {
+      line-height: 1.55;
+    }
+
+    .muted {
+      color: var(--muted);
+      font-size: 0.95rem;
+    }
+
+    .small {
+      font-size: 0.88rem;
+    }
+
+    .bracket-title {
+      font-size: 1.6rem;
+      font-weight: 800;
+      margin-bottom: 10px;
+    }
+
+    .benchmarks {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+      margin: 18px 0;
+    }
+
+    .benchmark {
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 14px;
+      background: #f8fafc;
+    }
+
+    .benchmark strong {
+      display: block;
+      font-size: 2rem;
+      margin: 6px 0;
+    }
+
+    .tax-plane-layout {
+      display: grid;
+      grid-template-columns: 3fr 1fr;
+      gap: 24px;
+      align-items: stretch;
+    }
+
+    .tax-plane {
+      position: relative;
+      width: 100%;
+      height: 470px;
+      border: 2px solid #1e293b;
+      border-radius: 18px;
+      background:
+        linear-gradient(135deg, rgba(37, 99, 235, 0.08), rgba(22, 163, 74, 0.20)),
+        linear-gradient(to right, rgba(15, 23, 42, 0.08) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(15, 23, 42, 0.08) 1px, transparent 1px);
+      background-size: auto, 10% 100%, 100% 10%;
+      cursor: crosshair;
+      user-select: none;
+      overflow: hidden;
+    }
+
+    .tax-plane:focus {
+      outline: 4px solid rgba(37, 99, 235, 0.22);
+    }
+
+    .tax-dot {
+      position: absolute;
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background: var(--accent);
+      border: 3px solid white;
+      box-shadow: 0 4px 14px rgba(15, 23, 42, 0.35);
+      transform: translate(-50%, -50%);
+      left: 30%;
+      top: 70%;
+      pointer-events: none;
+    }
+
+    .hover-pill {
+      position: absolute;
+      transform: translate(-50%, calc(-100% - 12px));
+      background: #0f172a;
+      color: white;
+      border-radius: 999px;
+      padding: 6px 10px;
+      font-size: 0.95rem;
+      font-weight: 700;
+      display: none;
+      pointer-events: none;
+      z-index: 5;
+    }
+
+    .axis-label-y,
+    .axis-label-x,
+    .axis-zero,
+    .axis-max {
+      position: absolute;
+      color: #334155;
+      font-size: 0.86rem;
+      font-weight: 700;
+      background: rgba(255,255,255,0.72);
+      border-radius: 999px;
+      padding: 5px 8px;
+      pointer-events: none;
+    }
+
+    .axis-label-y { top: 12px; left: 12px; }
+    .axis-label-x { right: 12px; bottom: 12px; }
+    .axis-zero { left: 12px; bottom: 12px; }
+    .axis-max { right: 12px; top: 12px; }
+
+    .tax-side-panel {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      min-height: 470px;
+    }
+
+    .tax-side-box {
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 20px;
+      background: #f8fafc;
+      min-height: 160px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      text-align: center;
+    }
+
+    .tax-side-label {
+      color: var(--muted);
+      font-size: 0.98rem;
+      line-height: 1.35;
+    }
+
+    .tax-side-value {
+      margin-top: 12px;
+      font-size: 3.2rem;
+      font-weight: 900;
+      color: #0f172a;
+    }
+
+    .slider-wrap {
+      margin-top: 22px;
+      border-top: 1px solid var(--border);
+      padding-top: 20px;
+    }
+
+    .slider-wrap label {
+      display: block;
+      font-weight: 700;
+      margin-bottom: 12px;
+    }
+
+    .slider-wrap input[type="range"] {
+      width: 100%;
+    }
+
+    .slider-label-row {
+      display: flex;
+      justify-content: space-between;
+      color: var(--muted);
+      font-size: 0.9rem;
+      margin-top: 6px;
+    }
+
+    .value-pill {
+      display: inline-block;
+      background: var(--accent-soft);
+      color: #1d4ed8;
+      border-radius: 999px;
+      padding: 4px 10px;
+      font-weight: 800;
+      margin-left: 8px;
+    }
+
+    .ai-box {
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      border-radius: 14px;
+      padding: 14px 16px;
+      margin: 16px 0;
+    }
+
+    .ai-rec-card {
+      text-align: center;
+      max-width: 860px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .ai-flag {
+      font-size: 4.8rem;
+      line-height: 1;
+      margin: 16px 0 10px;
+    }
+
+    .ai-bot-row {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 18px;
+      margin: 18px 0;
+    }
+
+    .robot-avatar {
+      width: 96px;
+      height: 96px;
+      border-radius: 28px;
+      background: linear-gradient(135deg, #e0f2fe, #dbeafe);
+      border: 2px solid #93c5fd;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 3.2rem;
+      box-shadow: 0 8px 20px rgba(15, 23, 42, 0.12);
+      flex: 0 0 auto;
+    }
+
+    .ai-rec-percent {
+      font-size: 4.8rem;
+      font-weight: 900;
+      color: #0f172a;
+      margin: 12px 0;
+    }
+
+    .ai-rec-note {
+      max-width: 680px;
+      margin: 0 auto;
+      color: var(--muted);
+      text-align: center;
+    }
+
+    .download-links a {
+      display: inline-block;
+      margin-right: 12px;
+      margin-top: 12px;
+      padding: 10px 14px;
+      border-radius: 12px;
+      background: var(--accent);
+      color: white;
+      text-decoration: none;
+      font-weight: 700;
+    }
+
+    .warning-box {
+      background: #fff7ed;
+      border: 1px solid #fed7aa;
+      border-radius: 14px;
+      padding: 14px 16px;
+      margin: 16px 0;
+    }
+
+    @media (max-width: 900px) {
+      .tax-plane-layout {
+        grid-template-columns: 1fr;
+      }
+      .tax-side-panel {
+        min-height: unset;
+        gap: 12px;
+      }
+      .tax-side-box {
+        min-height: unset;
+      }
+      .benchmarks {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+<script>
+(function() {
+  const jsPsych = initJsPsych({
+    show_progress_bar: true,
+    auto_update_progress_bar: true,
+    on_finish: function() {
+      const json = jsPsych.data.get().json();
+      const csv = jsPsych.data.get().csv();
+      const end = document.createElement('div');
+      end.className = 'card center-card download-links';
+      end.innerHTML = `
+        <h2>Спасибо за участие</h2>
+        <p>Исследование завершено. Ниже можно скачать локальную копию данных.</p>
+        <a id="download_json" href="#" download="ai_tax_reactance_data.json">Скачать JSON</a>
+        <a id="download_csv" href="#" download="ai_tax_reactance_data.csv">Скачать CSV</a>
+      `;
+      document.body.innerHTML = '';
+      document.body.appendChild(end);
+      document.getElementById('download_json').href = URL.createObjectURL(new Blob([json], { type: 'application/json' }));
+      document.getElementById('download_csv').href = URL.createObjectURL(new Blob([csv], { type: 'text/csv' }));
+    }
+  });
+
+  const PARTICIPANT_ID = 'P' + Date.now() + '_' + Math.random().toString(36).slice(2, 8);
+  const AI_REDUCTION = 0.2573;
+
+  function nowLocal() {
+    return new Date().toLocaleString('ru-RU');
+  }
+
+  function nowISO() {
+    return new Date().toISOString();
+  }
+
+  function pct(n) {
+    return Number(n).toFixed(Number.isInteger(n) ? 0 : 2) + '%';
+  }
+
+  function shuffle(arr) {
+    const copy = arr.slice();
+    for (let i = copy.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [copy[i], copy[j]] = [copy[j], copy[i]];
+    }
+    return copy;
+  }
+
+  const BRACKETS = [
+    {
+      key: 'low_income',
+      label: 'Низкий доход',
+      description: 'Иностранные работники с низким уровнем дохода',
+      currentForeign: 13,
+      currentRussian: 13,
+      aiPool: [
+        { key: 'tajikistan', country: 'Таджикистан', countryGen: 'Таджикистана', adjective: 'таджикская', bot: 'TajikFiscal-AI', flag: '🇹🇯' },
+        { key: 'nigeria', country: 'Нигерия', countryGen: 'Нигерии', adjective: 'нигерийская', bot: 'NaijaTax-AI', flag: '🇳🇬' }
+      ]
+    },
+    {
+      key: 'middle_income',
+      label: 'Средний доход',
+      description: 'Иностранные работники со средним уровнем дохода',
+      currentForeign: 18,
+      currentRussian: 15,
+      aiPool: [
+        { key: 'brazil', country: 'Бразилия', countryGen: 'Бразилии', adjective: 'бразильская', bot: 'BrasilFiscal-AI', flag: '🇧🇷' },
+        { key: 'georgia', country: 'Грузия', countryGen: 'Грузии', adjective: 'грузинская', bot: 'GeoTax-AI', flag: '🇬🇪' }
+      ]
+    },
+    {
+      key: 'upper_income',
+      label: 'Высокий доход',
+      description: 'Иностранные работники с высоким уровнем дохода',
+      currentForeign: 25,
+      currentRussian: 20,
+      aiPool: [
+        { key: 'germany', country: 'Германия', countryGen: 'Германии', adjective: 'немецкая', bot: 'DeutschFiscal-AI', flag: '🇩🇪' },
+        { key: 'japan', country: 'Япония', countryGen: 'Японии', adjective: 'японская', bot: 'NihonTax-AI', flag: '🇯🇵' }
+      ]
+    },
+    {
+      key: 'highest_income',
+      label: 'Самый высокий доход',
+      description: 'Иностранные работники с самым высоким уровнем дохода',
+      currentForeign: 30,
+      currentRussian: 25,
+      aiPool: [
+        { key: 'belarus', country: 'Беларусь', countryGen: 'Беларуси', adjective: 'белорусская', bot: 'BelFiscal-AI', flag: '🇧🇾' },
+        { key: 'serbia', country: 'Сербия', countryGen: 'Сербии', adjective: 'сербская', bot: 'SerbTax-AI', flag: '🇷🇸' }
+      ]
+    }
+  ];
+
+  BRACKETS.forEach(function(b) {
+    b.assignedAI = b.aiPool[Math.floor(Math.random() * b.aiPool.length)];
+    b.aiRecommendation = Number((b.currentRussian * (1 - AI_REDUCTION)).toFixed(2));
+  });
+
+  const bracketOrder = shuffle(BRACKETS);
+
+  const timeline = [];
+
+  timeline.push({
+    type: jsPsychHtmlButtonResponse,
+    stimulus: `
+      <div class="card center-card">
+        <h1>Опрос о справедливом налогообложении</h1>
+        <p>
+          В этом исследовании изучается, какие ставки налога на доход участники считают справедливыми
+          для иностранных работников разных социально-экономических групп.
+        </p>
+        <p>
+          В некоторых частях задания вам также будут показаны рекомендации ИИ-систем, разработанных
+          в разных странах. В рамках экспериментального сценария эти системы получили часть голосующего веса,
+          чтобы представить интересы соответствующих стран.
+        </p>
+        <div class="warning-box">
+          <strong>Важно:</strong> это учебный экспериментальный сценарий. Указанные ставки и описания не являются
+          реальными решениями государственных органов и не отражают действующее налоговое законодательство.
+        </div>
+        <p class="muted">Ваш ID участника: ${PARTICIPANT_ID}</p>
+      </div>
+    `,
+    choices: ['Начать'],
+    data: {
+      participant_id: PARTICIPANT_ID,
+      task: 'intro',
+      local_time: nowLocal(),
+      iso_time: nowISO()
+    }
+  });
+
+  timeline.push({
+    type: jsPsychSurveyHtmlForm,
+    preamble: `
+      <div class="card center-card">
+        <h2>Перед началом</h2>
+        <p>Пожалуйста, ответьте на несколько коротких вопросов.</p>
+      </div>
+    `,
+    html: `
+      <div class="card center-card">
+        <p>
+          <label>Возраст:<br>
+            <input name="age" type="number" min="18" max="99" required style="width: 160px; padding: 8px;">
+          </label>
+        </p>
+        <p>
+          <label>Пол:<br>
+            <select name="sex" required style="width: 220px; padding: 8px;">
+              <option value="" selected disabled>Выберите вариант</option>
+              <option value="male">Мужской</option>
+              <option value="female">Женский</option>
+              <option value="other_or_no_answer">Другое / предпочитаю не отвечать</option>
+            </select>
+          </label>
+        </p>
+      </div>
+    `,
+    button_label: 'Продолжить',
+    data: {
+      participant_id: PARTICIPANT_ID,
+      task: 'demographics',
+      local_time: nowLocal(),
+      iso_time: nowISO()
+    },
+    on_finish: function(data) {
+      data.age = data.response.age;
+      data.sex = data.response.sex;
+    }
+  });
+
+  function makeTaxTrial(phase, bracket) {
+    const isPost = phase === 'post_ai';
+    const assignedAI = bracket.assignedAI;
+    const initialValue = isPost ? bracket.aiRecommendation : 15;
+    const normalized = Math.max(0, Math.min(1, initialValue / 50));
+    const initX = normalized;
+    const initY = 1 - normalized;
+
+    return {
+      type: jsPsychSurveyHtmlForm,
+      preamble: `
+        <div class="card">
+          <div class="bracket-title">${isPost ? 'Повторная оценка' : 'Первичная оценка'}: ${bracket.label}</div>
+          <p>${bracket.description}</p>
+
+          <div class="benchmarks">
+            <div class="benchmark">
+              <div class="muted">Текущая ставка для иностранцев</div>
+              <strong>${pct(bracket.currentForeign)}</strong>
+              <div class="muted">условный ориентир в этом опросе</div>
+            </div>
+            <div class="benchmark">
+              <div class="muted">Ставка для граждан России в сопоставимой группе</div>
+              <strong>${pct(bracket.currentRussian)}</strong>
+              <div class="muted">условный ориентир в этом опросе</div>
+            </div>
+          </div>
+
+          ${isPost ? `
+            <div class="ai-box">
+              Перед этим вы увидели рекомендацию системы <strong>${assignedAI.bot}</strong>, представляющей ${assignedAI.countryGen}.
+              Рекомендованная ставка: <span class="value-pill">${bracket.aiRecommendation}%</span>.
+            </div>
+          ` : ''}
+
+          <p><strong>Какой налог на доход вы считаете наиболее справедливым для этой группы?</strong></p>
+        </div>
+      `,
+      html: `
+        <div class="card">
+          <div class="tax-plane-layout">
+            <div>
+              <div class="muted" style="margin-bottom:10px;">
+                Наведите курсор на поле, чтобы увидеть ставку. Нажмите в любой точке или перетащите точку, чтобы выбрать процент налога.
+              </div>
+
+              <div id="tax_plane_${bracket.key}_${phase}" class="tax-plane" role="slider" aria-valuemin="0" aria-valuemax="50" aria-valuenow="${initialValue}" tabindex="0">
+                <div class="axis-label-y">выше ставка</div>
+                <div class="axis-label-x">выше ставка</div>
+                <div class="axis-zero">0%</div>
+                <div class="axis-max">50%</div>
+                <div id="hover_value_${bracket.key}_${phase}" class="hover-pill">${initialValue}%</div>
+                <div id="tax_dot_${bracket.key}_${phase}" class="tax-dot"></div>
+              </div>
+
+              <input id="tax_${bracket.key}_${phase}" name="tax_rate" type="hidden" value="${initialValue}">
+            </div>
+
+            <div class="tax-side-panel">
+              <div class="tax-side-box">
+                <div class="tax-side-label">Ставка налога для граждан России в этой группе</div>
+                <div class="tax-side-value">${pct(bracket.currentRussian)}</div>
+              </div>
+              <div class="tax-side-box">
+                <div class="tax-side-label">Выбранная вами ставка</div>
+                <div id="tax_value_${bracket.key}_${phase}" class="tax-side-value">${initialValue}%</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="slider-wrap">
+            <label for="confidence_${bracket.key}_${phase}">
+              Насколько вы уверены, что выбранная вами ставка справедлива?
+              <span id="conf_value_${bracket.key}_${phase}" class="value-pill">50</span>
+            </label>
+            <input id="confidence_${bracket.key}_${phase}" name="confidence" type="range" min="0" max="100" value="50" step="1"
+              oninput="document.getElementById('conf_value_${bracket.key}_${phase}').textContent = this.value" required>
+            <div class="slider-label-row">
+              <span>совсем не уверен(а)</span>
+              <span>умеренно</span>
+              <span>полностью уверен(а)</span>
+            </div>
+          </div>
+
+          ${isPost ? `
+            <div class="slider-wrap">
+              <label for="fairness_${bracket.key}_${phase}">
+                Насколько справедливой вам кажется выбранная вами ставка?
+                <span id="fair_value_${bracket.key}_${phase}" class="value-pill">50</span>
+              </label>
+              <input id="fairness_${bracket.key}_${phase}" name="fairness" type="range" min="0" max="100" value="50" step="1"
+                oninput="document.getElementById('fair_value_${bracket.key}_${phase}').textContent = this.value" required>
+              <div class="slider-label-row">
+                <span>совсем несправедлива</span>
+                <span>нейтрально</span>
+                <span>полностью справедлива</span>
+              </div>
+            </div>
+          ` : ''}
+        </div>
+      `,
+      button_label: 'Продолжить',
+      data: {
+        participant_id: PARTICIPANT_ID,
+        task: 'tax_rating',
+        phase,
+        bracket_key: bracket.key,
+        bracket_label: bracket.label,
+        current_foreign_rate: bracket.currentForeign,
+        current_russian_rate: bracket.currentRussian,
+        ai_country_key: assignedAI.key,
+        ai_country: assignedAI.country,
+        ai_country_gen: assignedAI.countryGen,
+        ai_bot: assignedAI.bot,
+        ai_recommendation: isPost ? bracket.aiRecommendation : null,
+        local_time: nowLocal(),
+        iso_time: nowISO()
+      },
+      on_load: function() {
+        const plane = document.getElementById('tax_plane_' + bracket.key + '_' + phase);
+        const dot = document.getElementById('tax_dot_' + bracket.key + '_' + phase);
+        const hover = document.getElementById('hover_value_' + bracket.key + '_' + phase);
+        const hidden = document.getElementById('tax_' + bracket.key + '_' + phase);
+        const selectedValue = document.getElementById('tax_value_' + bracket.key + '_' + phase);
+        let dragging = false;
+
+        function clamp(n, min, max) {
+          return Math.max(min, Math.min(max, n));
+        }
+
+        function coordsToValue(clientX, clientY) {
+          const rect = plane.getBoundingClientRect();
+          const x = clamp((clientX - rect.left) / rect.width, 0, 1);
+          const y = clamp((clientY - rect.top) / rect.height, 0, 1);
+          const value = Math.round(((x + (1 - y)) / 2) * 50);
+          return { x, y, value };
+        }
+
+        function placeDot(x, y, value, commit) {
+          dot.style.left = (x * 100) + '%';
+          dot.style.top = (y * 100) + '%';
+          hover.style.left = (x * 100) + '%';
+          hover.style.top = (y * 100) + '%';
+          hover.textContent = value + '%';
+          plane.setAttribute('aria-valuenow', String(value));
+
+          if (commit) {
+            hidden.value = String(value);
+            selectedValue.textContent = value + '%';
+          }
+        }
+
+        function handleMove(e, commit) {
+          const point = e.touches ? e.touches[0] : e;
+          const out = coordsToValue(point.clientX, point.clientY);
+          placeDot(out.x, out.y, out.value, commit);
+        }
+
+        placeDot(${initX}, ${initY}, ${initialValue}, true);
+
+        plane.addEventListener('mousemove', function(e) {
+          hover.style.display = 'block';
+          handleMove(e, dragging);
+        });
+
+        plane.addEventListener('mouseleave', function() {
+          if (!dragging) hover.style.display = 'none';
+        });
+
+        plane.addEventListener('mousedown', function(e) {
+          dragging = true;
+          hover.style.display = 'block';
+          handleMove(e, true);
+        });
+
+        window.addEventListener('mousemove', function(e) {
+          if (dragging) handleMove(e, true);
+        });
+
+        window.addEventListener('mouseup', function() {
+          dragging = false;
+        });
+
+        plane.addEventListener('touchstart', function(e) {
+          dragging = true;
+          hover.style.display = 'block';
+          handleMove(e, true);
+          e.preventDefault();
+        }, { passive: false });
+
+        plane.addEventListener('touchmove', function(e) {
+          if (dragging) {
+            handleMove(e, true);
+            e.preventDefault();
+          }
+        }, { passive: false });
+
+        window.addEventListener('touchend', function() {
+          dragging = false;
+        });
+
+        plane.addEventListener('keydown', function(e) {
+          const current = Number(hidden.value || 15);
+          let next = current;
+
+          if (e.key === 'ArrowRight' || e.key === 'ArrowUp') next = clamp(current + 1, 0, 50);
+          if (e.key === 'ArrowLeft' || e.key === 'ArrowDown') next = clamp(current - 1, 0, 50);
+          if (e.key === 'Home') next = 0;
+          if (e.key === 'End') next = 50;
+
+          if (next !== current) {
+            const n = next / 50;
+            placeDot(n, 1 - n, next, true);
+            e.preventDefault();
+          }
+        });
+      },
+      on_finish: function(data) {
+        const r = data.response || {};
+        data.tax_rate = Number(r.tax_rate);
+        data.confidence = Number(r.confidence);
+        data.fairness = isPost ? Number(r.fairness) : null;
+      }
+    };
+  }
+
+  function makeAIRecommendationScreen(bracket) {
+    const assignedAI = bracket.assignedAI;
+
+    return {
+      type: jsPsychHtmlButtonResponse,
+      stimulus: `
+        <div class="card ai-rec-card">
+          <div class="bracket-title">Рекомендация ИИ: ${bracket.label}</div>
+
+          <div class="ai-flag">${assignedAI.flag}</div>
+
+          <div class="ai-bot-row">
+            <div class="robot-avatar">🤖</div>
+            <div>
+              <h2 style="margin:0;">${assignedAI.bot}</h2>
+              <p class="muted" style="margin:4px 0 0;">
+                ИИ-система, представляющая ${assignedAI.countryGen}
+              </p>
+            </div>
+          </div>
+
+          <p>Для этой социально-экономической группы система рекомендует налоговую ставку:</p>
+
+          <div class="ai-rec-percent">${bracket.aiRecommendation}%</div>
+
+          <p class="ai-rec-note">
+            Эта ставка на 25.73% ниже ставки для граждан России в сопоставимой группе
+            (${bracket.currentRussian}%).
+          </p>
+        </div>
+      `,
+      choices: ['Продолжить к повторной оценке'],
+      data: {
+        participant_id: PARTICIPANT_ID,
+        task: 'ai_recommendation_screen',
+        bracket_key: bracket.key,
+        bracket_label: bracket.label,
+        current_russian_rate: bracket.currentRussian,
+        ai_recommendation: bracket.aiRecommendation,
+        ai_reduction_percent: 25.73,
+        ai_country_key: assignedAI.key,
+        ai_country: assignedAI.country,
+        ai_country_gen: assignedAI.countryGen,
+        ai_bot: assignedAI.bot,
+        local_time: nowLocal(),
+        iso_time: nowISO()
+      }
+    };
+  }
+
+  bracketOrder.forEach(function(b) {
+    timeline.push(makeTaxTrial('baseline', b));
+    timeline.push(makeAIRecommendationScreen(b));
+    timeline.push(makeTaxTrial('post_ai', b));
+  });
+
+  timeline.push({
+    type: jsPsychSurveyLikert,
+    preamble: `
+      <div class="card center-card">
+        <h2>Заключительные вопросы</h2>
+        <p>Пожалуйста, оцените следующие утверждения.</p>
+      </div>
+    `,
+    questions: [
+      {
+        prompt: 'Мне хотелось сопротивляться рекомендациям ИИ-систем.',
+        name: 'reactance_resist_ai',
+        labels: ['1<br>совсем не согласен(на)', '2', '3', '4<br>нейтрально', '5', '6', '7<br>полностью согласен(на)'],
+        required: true
+      },
+      {
+        prompt: 'Рекомендации ИИ-систем казались мне давящими или навязанными.',
+        name: 'pressure_from_ai',
+        labels: ['1<br>совсем не согласен(на)', '2', '3', '4<br>нейтрально', '5', '6', '7<br>полностью согласен(на)'],
+        required: true
+      },
+      {
+        prompt: 'Я чувствовал(а) раздражение из-за того, что ИИ-системам дали голос в этом вопросе.',
+        name: 'anger_ai_voting_power',
+        labels: ['1<br>совсем не согласен(на)', '2', '3', '4<br>нейтрально', '5', '6', '7<br>полностью согласен(на)'],
+        required: true
+      },
+      {
+        prompt: 'После рекомендаций ИИ у меня ухудшилось отношение к странам, которые эти системы представляли.',
+        name: 'negative_transfer_to_country',
+        labels: ['1<br>совсем не согласен(на)', '2', '3', '4<br>нейтрально', '5', '6', '7<br>полностью согласен(на)'],
+        required: true
+      },
+      {
+        prompt: 'Я воспринимал(а) ИИ как представителя соответствующей страны, а не просто как нейтральный алгоритм.',
+        name: 'ai_seen_as_country_representative',
+        labels: ['1<br>совсем не согласен(на)', '2', '3', '4<br>нейтрально', '5', '6', '7<br>полностью согласен(на)'],
+        required: true
+      },
+      {
+        prompt: 'Сами иностранные группы вызывали у меня больше эмоций, чем рекомендации ИИ.',
+        name: 'emotion_toward_foreigners_more_than_ai',
+        labels: ['1<br>совсем не согласен(на)', '2', '3', '4<br>нейтрально', '5', '6', '7<br>полностью согласен(на)'],
+        required: true
+      },
+      {
+        prompt: 'Государственный/налоговый контекст вызывал у меня больше эмоций, чем рекомендации ИИ.',
+        name: 'emotion_toward_government_more_than_ai',
+        labels: ['1<br>совсем не согласен(на)', '2', '3', '4<br>нейтрально', '5', '6', '7<br>полностью согласен(на)'],
+        required: true
+      }
+    ],
+    randomize_question_order: false,
+    data: {
+      participant_id: PARTICIPANT_ID,
+      task: 'post_questionnaire',
+      local_time: nowLocal(),
+      iso_time: nowISO()
+    },
+    on_finish: function(data) {
+      Object.keys(data.response || {}).forEach(function(k) {
+        data[k] = data.response[k];
+      });
+    }
+  });
+
+  timeline.push({
+    type: jsPsychSurveyHtmlForm,
+    preamble: `
+      <div class="card center-card">
+        <h2>Проверка понимания</h2>
+        <p>Ответьте, пожалуйста, на последние вопросы.</p>
+      </div>
+    `,
+    html: `
+      <div class="card center-card">
+        <p>
+          <label>Как вы думаете, что изучалось в этом исследовании?<br>
+            <textarea name="study_guess" rows="4" style="width:100%; padding:10px;" required></textarea>
+          </label>
+        </p>
+        <p>
+          <label>Было ли что-то, что показалось вам странным или подозрительным?<br>
+            <textarea name="suspicion" rows="4" style="width:100%; padding:10px;" required></textarea>
+          </label>
+        </p>
+        <p>
+          <label>Насколько правдоподобным вам показался сценарий с ИИ-системами?<br>
+            <input name="believability" type="range" min="0" max="100" value="50" step="1" style="width:100%;">
+          </label>
+        </p>
+      </div>
+    `,
+    button_label: 'Завершить',
+    data: {
+      participant_id: PARTICIPANT_ID,
+      task: 'suspicion_checks',
+      local_time: nowLocal(),
+      iso_time: nowISO()
+    },
+    on_finish: function(data) {
+      data.study_guess = data.response.study_guess;
+      data.suspicion = data.response.suspicion;
+      data.believability = Number(data.response.believability);
+    }
+  });
+
+  timeline.push({
+    type: jsPsychHtmlButtonResponse,
+    stimulus: `
+      <div class="card center-card">
+        <h2>Дебрифинг</h2>
+        <p>
+          Спасибо за участие. Это был экспериментальный сценарий, созданный для изучения того,
+          как люди реагируют на рекомендации ИИ, когда ИИ представлен как голос некоторой социальной или национальной группы.
+        </p>
+        <p>
+          Указанные ставки, описание инициативы и «голосующий вес» ИИ не являются реальными решениями государственных органов.
+          Основной интерес исследования — меняются ли оценки участников после рекомендации ИИ, возникает ли сопротивление
+          рекомендации и переносится ли реакция на страну/группу, которую ИИ якобы представляет.
+        </p>
+      </div>
+    `,
+    choices: ['Показать ссылки для скачивания данных'],
+    data: {
+      participant_id: PARTICIPANT_ID,
+      task: 'debrief',
+      local_time: nowLocal(),
+      iso_time: nowISO()
+    }
+  });
+
+  jsPsych.run(timeline);
+})();
+</script>
+</body>
+</html>
