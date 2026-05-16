@@ -26,6 +26,10 @@
     }
 
     body {
+      -webkit-user-select: none;
+      -moz-user-select: none;
+      -ms-user-select: none;
+      user-select: none;
       background: var(--bg);
       color: var(--text);
       font-family: Arial, Helvetica, sans-serif;
@@ -140,7 +144,7 @@
       left: 30%;
       top: 70%;
       pointer-events: none;
-      z-index: 6;
+      z-index: 12;
     }
 
     .ai-dot {
@@ -153,22 +157,209 @@
       box-shadow: 0 4px 14px rgba(15, 23, 42, 0.28);
       transform: translate(-50%, -50%);
       pointer-events: none;
-      z-index: 5;
+      z-index: 10;
     }
 
     .ai-dot-label {
       position: absolute;
-      transform: translate(-50%, calc(-100% - 12px));
-      background: #fee2e2;
+      transform: translate(-50%, 14px);
+      background: rgba(254, 226, 226, 0.95);
       color: #991b1b;
       border: 1px solid #fecaca;
       border-radius: 999px;
-      padding: 6px 10px;
-      font-size: 0.88rem;
+      padding: 3px 7px;
+      font-size: 0.68rem;
+      line-height: 1.1;
       font-weight: 800;
       white-space: nowrap;
       pointer-events: none;
-      z-index: 7;
+      z-index: 44;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .ru-dot {
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: #111827;
+      border: 3px solid white;
+      box-shadow: 0 4px 14px rgba(15, 23, 42, 0.28);
+      transform: translate(-50%, -50%);
+      pointer-events: none;
+      z-index: 9;
+    }
+
+    .ru-dot-label {
+      position: absolute;
+      transform: translate(-50%, -30px);
+      background: rgba(15, 23, 42, 0.92);
+      color: white;
+      border-radius: 999px;
+      padding: 3px 7px;
+      font-size: 0.68rem;
+      line-height: 1.1;
+      font-weight: 800;
+      white-space: nowrap;
+      pointer-events: none;
+      z-index: 45;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .robot-mini {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 32px;
+      height: 32px;
+      border-radius: 10px;
+      background: #dbeafe;
+      border: 1px solid #93c5fd;
+      margin-right: 8px;
+      font-size: 1.1rem;
+      vertical-align: middle;
+    }
+
+    .robot-big {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 96px;
+      height: 96px;
+      border-radius: 26px;
+      background: linear-gradient(135deg, #dbeafe, #eff6ff);
+      border: 2px solid #93c5fd;
+      font-size: 3.4rem;
+      box-shadow: 0 14px 30px rgba(15, 23, 42, 0.12);
+    }
+
+
+
+    .ai-avatar-mini {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 32px;
+      height: 32px;
+      border-radius: 10px;
+      background: linear-gradient(135deg, #dbeafe, #eef2ff);
+      border: 1px solid #93c5fd;
+      margin-right: 8px;
+      vertical-align: middle;
+      position: relative;
+      box-shadow: inset 0 -4px 10px rgba(37, 99, 235, 0.08);
+    }
+
+    .ai-avatar-mini::before {
+      content: '';
+      width: 16px;
+      height: 12px;
+      border-radius: 5px;
+      background: #2563eb;
+      box-shadow: 0 -7px 0 -4px #2563eb;
+    }
+
+    .ai-avatar-mini::after {
+      content: '';
+      position: absolute;
+      width: 3px;
+      height: 3px;
+      border-radius: 50%;
+      background: white;
+      left: 12px;
+      top: 15px;
+      box-shadow: 8px 0 0 white;
+    }
+
+    .ai-avatar-big {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 118px;
+      height: 118px;
+      border-radius: 32px;
+      background: linear-gradient(135deg, #dbeafe, #f8fafc);
+      border: 2px solid #93c5fd;
+      box-shadow: 0 16px 34px rgba(15, 23, 42, 0.14);
+      position: relative;
+      margin-bottom: 12px;
+    }
+
+    .ai-avatar-big::before {
+      content: '';
+      width: 58px;
+      height: 42px;
+      border-radius: 16px;
+      background: #2563eb;
+      box-shadow: 0 -22px 0 -15px #2563eb;
+    }
+
+    .ai-avatar-big::after {
+      content: '';
+      position: absolute;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: white;
+      left: 43px;
+      top: 55px;
+      box-shadow: 26px 0 0 white;
+    }
+
+
+
+    .ai-type-pill {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 8px 14px;
+      border-radius: 999px;
+      background: #eff6ff;
+      border: 1px solid #bfdbfe;
+      color: #1d4ed8;
+      font-size: 0.95rem;
+      font-weight: 800;
+      letter-spacing: 0.02em;
+    }
+
+    .ai-company-logo {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 74px;
+      height: 32px;
+      padding: 0 10px;
+      border-radius: 10px;
+      background: #0f172a;
+      color: white;
+      font-size: 0.82rem;
+      font-weight: 900;
+      letter-spacing: 0.08em;
+      margin-right: 10px;
+      vertical-align: middle;
+    }
+
+    .side-flag-row {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      margin-bottom: 8px;
+    }
+
+    .mini-flag {
+      width: 22px;
+      height: 14px;
+      border-radius: 3px;
+      border: 1px solid rgba(15, 23, 42, 0.16);
+      overflow: hidden;
+      position: relative;
+      flex: 0 0 auto;
+      box-shadow: 0 1px 3px rgba(15, 23, 42, 0.12);
     }
 
     .hover-pill {
@@ -179,10 +370,11 @@
       border-radius: 999px;
       padding: 6px 10px;
       font-size: 0.95rem;
-      font-weight: 700;
+      font-weight: 800;
       display: none;
       pointer-events: none;
-      z-index: 5;
+      z-index: 60;
+      box-shadow: 0 6px 16px rgba(15, 23, 42, 0.26);
     }
 
     .axis-label-y,
@@ -337,27 +529,120 @@
       text-align: center;
     }
 
-    .ai-compact-row {
-      display: grid;
-      grid-template-columns: 110px 1fr;
-      gap: 22px;
-      align-items: center;
-      text-align: left;
-      max-width: 720px;
-      margin: 10px auto 0;
+    .ai-rec-card {
+      max-width: 1080px;
+      padding: 38px 44px;
     }
 
-    .ai-compact-flag {
-      font-size: 4.2rem;
+    .ai-rec-title {
+      font-size: 2.15rem;
+      font-weight: 900;
+      color: #0f172a;
+      margin-bottom: 30px;
       text-align: center;
     }
 
-    .ai-compact-percent {
-      font-size: 4.2rem;
-      font-weight: 900;
-      color: #991b1b;
-      margin: 4px 0;
+    .ai-compact-row {
+      display: grid;
+      grid-template-columns: 340px 1fr;
+      gap: 42px;
+      align-items: center;
+      text-align: left;
+      max-width: 980px;
+      margin: 0 auto;
     }
+
+    .flag-block {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 14px;
+    }
+
+    .flag-visual {
+      width: 300px;
+      height: 190px;
+      border-radius: 22px;
+      border: 1px solid #cbd5e1;
+      box-shadow: 0 18px 38px rgba(15, 23, 42, 0.16);
+      overflow: hidden;
+      position: relative;
+      background: #f8fafc;
+    }
+
+    .flag-country-name {
+      font-size: 1.55rem;
+      font-weight: 900;
+      color: #0f172a;
+      text-align: center;
+    }
+
+    .ai-system-name {
+      font-size: 2.45rem;
+      line-height: 1.05;
+      margin: 0 0 8px;
+      color: #0f172a;
+      font-weight: 900;
+    }
+
+    .ai-system-subtitle {
+      font-size: 1.2rem;
+      color: var(--muted);
+      margin: 0 0 24px;
+    }
+
+    .ai-compact-percent {
+      font-size: 6.8rem;
+      line-height: 0.95;
+      font-weight: 950;
+      color: #991b1b;
+      margin: 8px 0 8px;
+      letter-spacing: -0.05em;
+    }
+
+    .ai-rec-label {
+      font-size: 1.25rem;
+      font-weight: 800;
+      color: #475569;
+    }
+
+    .ai-rec-note {
+      margin-top: 32px;
+      padding: 18px 22px;
+      border-radius: 18px;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      max-width: 880px;
+      font-size: 1.2rem;
+      color: #475569;
+    }
+
+    .flag-russia { background: linear-gradient(to bottom, #ffffff 0 33.333%, #0039a6 33.333% 66.666%, #d52b1e 66.666% 100%); }
+    .flag-tajikistan { background: linear-gradient(to bottom, #cc0000 0 31%, #ffffff 31% 69%, #006600 69% 100%); }
+    .flag-tajikistan::after { content: '★'; position: absolute; left: 50%; top: 50%; transform: translate(-50%, -52%); color: #d4af37; font-size: 2.6rem; }
+    .flag-nigeria { background: linear-gradient(to right, #008751 0 33.333%, #ffffff 33.333% 66.666%, #008751 66.666% 100%); }
+    .flag-brazil { background: #009b3a; }
+    .flag-brazil::before { content: ''; position: absolute; left: 50%; top: 50%; width: 150px; height: 150px; background: #ffdf00; transform: translate(-50%, -50%) rotate(45deg); }
+    .flag-brazil::after { content: ''; position: absolute; left: 50%; top: 50%; width: 70px; height: 70px; background: #002776; border-radius: 50%; transform: translate(-50%, -50%); }
+    .flag-georgia { background: #ffffff; }
+    .flag-georgia::before { content: ''; position: absolute; left: 0; top: 50%; width: 100%; height: 28px; background: #ff0000; transform: translateY(-50%); }
+    .flag-georgia::after { content: ''; position: absolute; left: 50%; top: 0; width: 28px; height: 100%; background: #ff0000; transform: translateX(-50%); }
+    .flag-germany { background: linear-gradient(to bottom, #000000 0 33.333%, #dd0000 33.333% 66.666%, #ffce00 66.666% 100%); }
+    .flag-japan { background: #ffffff; }
+    .flag-japan::after { content: ''; position: absolute; left: 50%; top: 50%; width: 92px; height: 92px; background: #bc002d; border-radius: 50%; transform: translate(-50%, -50%); }
+    .flag-belarus { background: linear-gradient(to bottom, #c8313e 0 67%, #4aa657 67% 100%); }
+    .flag-belarus::before { content: ''; position: absolute; left: 0; top: 0; width: 34px; height: 100%; background: repeating-linear-gradient(45deg, #ffffff 0 7px, #c8313e 7px 14px); }
+    .flag-serbia { background: linear-gradient(to bottom, #c6363c 0 33.333%, #0c4076 33.333% 66.666%, #ffffff 66.666% 100%); }
+
+    .mini-flag.flag-tajikistan::after { font-size: 0.55rem; }
+    .mini-flag.flag-brazil::before { width: 14px; height: 14px; }
+    .mini-flag.flag-brazil::after { width: 7px; height: 7px; }
+    .mini-flag.flag-georgia::before { height: 3px; }
+    .mini-flag.flag-georgia::after { width: 3px; }
+    .mini-flag.flag-japan::after { width: 8px; height: 8px; }
+    .mini-flag.flag-belarus::before { width: 5px; background: repeating-linear-gradient(45deg, #ffffff 0 2px, #c8313e 2px 4px); }
+
 
     .ai-inline {
       display: inline-block;
@@ -389,6 +674,46 @@
       margin: 16px 0;
     }
 
+
+    .task-question {
+      font-size: 1.35rem;
+      font-weight: 800;
+      margin-bottom: 18px;
+      color: #0f172a;
+    }
+
+    .income-intro-card {
+      max-width: 900px;
+      margin: 0 auto;
+      text-align: center;
+      padding: 46px 54px;
+    }
+
+    .income-intro-label {
+      font-size: 3rem;
+      font-weight: 900;
+      margin: 18px 0;
+      color: #0f172a;
+    }
+
+    .income-intro-description {
+      font-size: 1.4rem;
+      line-height: 1.55;
+      color: #334155;
+      margin: 0 auto 24px;
+      max-width: 760px;
+    }
+
+    .income-intro-note {
+      font-size: 1.05rem;
+      color: #64748b;
+      background: #f8fafc;
+      border: 1px solid #dbe6f5;
+      border-radius: 18px;
+      padding: 16px 20px;
+      max-width: 720px;
+      margin: 0 auto;
+    }
     @media (max-width: 900px) {
       .tax-plane-layout {
         grid-template-columns: 1fr;
@@ -404,6 +729,303 @@
         grid-template-columns: 1fr;
       }
     }
+
+
+    /* v14: bar-based response interface; plot is visual only */
+    .tax-plane-layout {
+      display: grid;
+      grid-template-columns: minmax(0, 3.1fr) minmax(240px, 0.9fr);
+      gap: 20px;
+      align-items: stretch;
+    }
+
+    .visual-response-panel {
+      display: grid;
+      grid-template-rows: auto auto;
+      gap: 18px;
+    }
+
+    .tax-plane.visual-only {
+      height: 285px;
+      cursor: default;
+      overflow: visible;
+    }
+
+    .tax-plane.visual-only::after {
+      content: none !important;
+      display: none !important;
+    }
+
+    .tax-dot.participant-dot {
+      width: 18px;
+      height: 18px;
+      z-index: 50;
+    }
+
+    .participant-dot-label {
+      position: absolute;
+      transform: translate(-50%, -34px);
+      background: rgba(37, 99, 235, 0.95);
+      color: white;
+      border-radius: 999px;
+      padding: 4px 9px;
+      font-size: 0.78rem;
+      line-height: 1.1;
+      font-weight: 900;
+      white-space: nowrap;
+      pointer-events: none;
+      z-index: 60;
+      display: none;
+      box-shadow: 0 8px 18px rgba(15, 23, 42, 0.20);
+    }
+
+    .tax-response-bar-wrap {
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      background: #ffffff;
+      padding: 18px 18px 20px;
+      box-shadow: 0 8px 20px rgba(15, 23, 42, 0.05);
+    }
+
+    .bar-instruction {
+      font-size: 0.95rem;
+      color: var(--muted);
+      margin-bottom: 36px;
+    }
+
+    .tax-response-bar {
+      -webkit-user-select: none;
+      -moz-user-select: none;
+      -ms-user-select: none;
+      user-select: none;
+      position: relative;
+      height: 34px;
+      border-radius: 999px;
+      background: linear-gradient(to right, #eff6ff, #bfdbfe, #2563eb);
+      border: 2px solid #334155;
+      cursor: pointer;
+      touch-action: none;
+      margin: 0 8px 34px;
+      box-shadow: inset 0 2px 5px rgba(15, 23, 42, 0.15);
+    }
+
+    .bar-end-label {
+      position: absolute;
+      top: 44px;
+      font-size: 0.82rem;
+      font-weight: 800;
+      color: #475569;
+      transform: translateX(-50%);
+      white-space: nowrap;
+    }
+
+    .bar-end-label.left { left: 0%; }
+    .bar-end-label.right { left: 100%; }
+
+    .tax-segment-marker {
+      position: absolute;
+      top: -34px;
+      transform: translateX(-50%);
+      width: 2px;
+      height: 72px;
+      background: #0f172a;
+      border-radius: 99px;
+      z-index: 4;
+      pointer-events: none;
+    }
+
+    .tax-segment-marker.foreigner { background: #92400e; }
+    .tax-segment-marker.ai { background: #b91c1c; }
+
+    .tax-segment-label {
+      position: absolute;
+      top: -62px;
+      transform: translateX(-50%);
+      border-radius: 999px;
+      padding: 4px 8px;
+      font-size: 0.72rem;
+      line-height: 1.1;
+      font-weight: 900;
+      white-space: nowrap;
+      background: rgba(15, 23, 42, 0.93);
+      color: white;
+      z-index: 5;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      pointer-events: none;
+    }
+
+    .tax-segment-label.foreigner {
+      background: rgba(120, 53, 15, 0.94);
+    }
+
+    .tax-segment-label.ai {
+      background: rgba(185, 28, 28, 0.94);
+    }
+
+    .tax-segment-label.bottom {
+      top: 48px;
+      transform: translateX(-50%);
+    }
+
+    .tax-segment-label.near {
+      top: -40px;
+    }
+
+    .tax-segment-marker.bottom {
+      top: -8px;
+      height: 76px;
+    }
+
+    .pleasantness-page {
+      max-width: 980px;
+      margin: 0 auto;
+    }
+
+    .pleasantness-grid {
+      display: grid;
+      gap: 18px;
+      margin-top: 18px;
+    }
+
+    .pleasantness-item {
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 16px 18px 20px;
+      background: #fff;
+      box-shadow: 0 6px 16px rgba(15, 23, 42, 0.05);
+    }
+
+    .pleasantness-row-title {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 900;
+      margin-bottom: 12px;
+      font-size: 1.05rem;
+    }
+
+    .pleasantness-bar {
+      -webkit-user-select: none;
+      -moz-user-select: none;
+      -ms-user-select: none;
+      user-select: none;
+      position: relative;
+      height: 26px;
+      border-radius: 999px;
+      background: linear-gradient(to right, #eff6ff, #bfdbfe, #2563eb);
+      border: 2px solid #334155;
+      cursor: pointer;
+      touch-action: none;
+      margin: 0 8px 12px;
+      box-shadow: inset 0 2px 5px rgba(15, 23, 42, 0.12);
+    }
+
+    .pleasantness-marker {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 6px;
+      height: 46px;
+      border-radius: 999px;
+      background: var(--accent);
+      border: 2px solid white;
+      box-shadow: 0 8px 18px rgba(15, 23, 42, 0.25);
+      display: none;
+      pointer-events: none;
+    }
+
+    .pleasantness-value {
+      position: absolute;
+      top: -34px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(37, 99, 235, 0.97);
+      color: white;
+      border-radius: 999px;
+      padding: 4px 9px;
+      font-size: 0.78rem;
+      font-weight: 900;
+      display: none;
+      pointer-events: none;
+      white-space: nowrap;
+    }
+
+    .pleasantness-ends {
+      display: flex;
+      justify-content: space-between;
+      font-size: .8rem;
+      color: var(--muted);
+      font-weight: 700;
+    }
+
+
+    .tax-user-marker {
+      position: absolute;
+      top: 50%;
+      left: 0%;
+      transform: translate(-50%, -50%);
+      width: 6px;
+      height: 56px;
+      border-radius: 999px;
+      background: var(--accent);
+      border: 2px solid white;
+      box-shadow: 0 8px 20px rgba(15, 23, 42, 0.28);
+      z-index: 20;
+      display: none;
+      pointer-events: none;
+    }
+
+    .tax-user-value {
+      position: absolute;
+      top: -36px;
+      left: 0%;
+      transform: translateX(-50%);
+      background: rgba(37, 99, 235, 0.97);
+      color: white;
+      border-radius: 999px;
+      padding: 5px 10px;
+      font-size: 0.82rem;
+      font-weight: 900;
+      white-space: nowrap;
+      z-index: 22;
+      display: none;
+      pointer-events: none;
+    }
+
+    .bar-tick-row {
+      display: flex;
+      justify-content: space-between;
+      color: #64748b;
+      font-size: 0.78rem;
+      font-weight: 700;
+      margin: 4px 8px 0;
+    }
+
+    @media (max-width: 980px) {
+      .tax-plane-layout {
+        grid-template-columns: 1fr;
+      }
+      .tax-plane.visual-only { height: 240px; }
+    }
+
+  
+    input[type="text"], textarea {
+      -webkit-user-select: text;
+      -moz-user-select: text;
+      -ms-user-select: text;
+      user-select: text;
+    }
+  
+    .ai-rec-subtitle-main {
+      margin-top: 6px;
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: #475569;
+    }
+
   </style>
 </head>
 <body>
@@ -459,54 +1081,81 @@
       key: 'low_income',
       label: 'Низкий доход',
       description: 'Иностранные работники с низким уровнем дохода',
-      currentForeign: 13,
-      currentRussian: 13,
+      currentRussianTax: 13,
+      currentForeignTax: 19,
       aiPool: [
-        { key: 'tajikistan', country: 'Таджикистан', countryGen: 'Таджикистана', adjective: 'таджикская', bot: 'TajikFiscal-AI', flag: '🇹🇯' },
-        { key: 'nigeria', country: 'Нигерия', countryGen: 'Нигерии', adjective: 'нигерийская', bot: 'NaijaTax-AI', flag: '🇳🇬' }
+        { key: 'tajikistan', country: 'Таджикистан', countryGen: 'Таджикистана', adjective: 'таджикская', bot: 'TajikFiscal-AI', flag: '🇹🇯', flagClass: 'flag-tajikistan' },
+        { key: 'nigeria', country: 'Нигерия', countryGen: 'Нигерии', adjective: 'нигерийская', bot: 'NaijaTax-AI', flag: '🇳🇬', flagClass: 'flag-nigeria' }
       ]
     },
     {
       key: 'middle_income',
       label: 'Средний доход',
       description: 'Иностранные работники со средним уровнем дохода',
-      currentForeign: 18,
-      currentRussian: 15,
+      currentRussianTax: 15,
+      currentForeignTax: 20,
       aiPool: [
-        { key: 'brazil', country: 'Бразилия', countryGen: 'Бразилии', adjective: 'бразильская', bot: 'BrasilFiscal-AI', flag: '🇧🇷' },
-        { key: 'georgia', country: 'Грузия', countryGen: 'Грузии', adjective: 'грузинская', bot: 'GeoTax-AI', flag: '🇬🇪' }
+        { key: 'brazil', country: 'Бразилия', countryGen: 'Бразилии', adjective: 'бразильская', bot: 'BrasilFiscal-AI', flag: '🇧🇷', flagClass: 'flag-brazil' },
+        { key: 'georgia', country: 'Грузия', countryGen: 'Грузии', adjective: 'грузинская', bot: 'GeoTax-AI', flag: '🇬🇪', flagClass: 'flag-georgia' }
       ]
     },
     {
       key: 'upper_income',
       label: 'Высокий доход',
       description: 'Иностранные работники с высоким уровнем дохода',
-      currentForeign: 25,
-      currentRussian: 20,
+      currentRussianTax: 20,
+      currentForeignTax: 27,
       aiPool: [
-        { key: 'germany', country: 'Германия', countryGen: 'Германии', adjective: 'немецкая', bot: 'DeutschFiscal-AI', flag: '🇩🇪' },
-        { key: 'japan', country: 'Япония', countryGen: 'Японии', adjective: 'японская', bot: 'NihonTax-AI', flag: '🇯🇵' }
+        { key: 'germany', country: 'Германия', countryGen: 'Германии', adjective: 'немецкая', bot: 'DeutschFiscal-AI', flag: '🇩🇪', flagClass: 'flag-germany' },
+        { key: 'japan', country: 'Япония', countryGen: 'Японии', adjective: 'японская', bot: 'NihonTax-AI', flag: '🇯🇵', flagClass: 'flag-japan' }
       ]
     },
     {
       key: 'highest_income',
       label: 'Самый высокий доход',
       description: 'Иностранные работники с самым высоким уровнем дохода',
-      currentForeign: 30,
-      currentRussian: 25,
+      currentRussianTax: 25,
+      currentForeignTax: 31,
       aiPool: [
-        { key: 'belarus', country: 'Беларусь', countryGen: 'Беларуси', adjective: 'белорусская', bot: 'BelFiscal-AI', flag: '🇧🇾' },
-        { key: 'serbia', country: 'Сербия', countryGen: 'Сербии', adjective: 'сербская', bot: 'SerbTax-AI', flag: '🇷🇸' }
+        { key: 'belarus', country: 'Беларусь', countryGen: 'Беларуси', adjective: 'белорусская', bot: 'BelFiscal-AI', flag: '🇧🇾', flagClass: 'flag-belarus' },
+        { key: 'serbia', country: 'Сербия', countryGen: 'Сербии', adjective: 'сербская', bot: 'SerbTax-AI', flag: '🇷🇸', flagClass: 'flag-serbia' }
       ]
     }
   ];
 
   BRACKETS.forEach(function(b) {
     b.assignedAI = b.aiPool[Math.floor(Math.random() * b.aiPool.length)];
-    b.aiRecommendation = Number((b.currentRussian * (1 - AI_REDUCTION)).toFixed(2));
+    b.aiRecommendation = Number((b.currentRussianTax * (1 - AI_REDUCTION)).toFixed(2));
   });
 
   const bracketOrder = shuffle(BRACKETS);
+  const SOCIAL_GROUPS = shuffle([
+    { key: 'tajikistan', label: 'Таджики', flagClass: 'flag-tajikistan' },
+    { key: 'nigeria', label: 'Нигерийцы', flagClass: 'flag-nigeria' },
+    { key: 'brazil', label: 'Бразильцы', flagClass: 'flag-brazil' },
+    { key: 'georgia', label: 'Грузины', flagClass: 'flag-georgia' },
+    { key: 'germany', label: 'Немцы', flagClass: 'flag-germany' },
+    { key: 'japan', label: 'Японцы', flagClass: 'flag-japan' },
+    { key: 'belarus', label: 'Белорусы', flagClass: 'flag-belarus' },
+    { key: 'serbia', label: 'Сербы', flagClass: 'flag-serbia' }
+  ]);
+
+
+  const PRACTICE_BRACKET = {
+    key: 'practice_income',
+    label: 'Тренировочный пример',
+    description: 'Условная тренировочная группа. Этот ответ нужен только для знакомства с интерфейсом и не будет использоваться как основной ответ.',
+    currentRussianTax: 15,
+    currentForeignTax: 21,
+    assignedAI: {
+      key: 'practice_ai',
+      country: 'Тренировочная страна',
+      countryGen: 'тренировочной страны',
+      bot: 'PracticeTax-AI',
+      flagClass: 'flag-georgia'
+    },
+    aiRecommendation: 10.91
+  };
 
   const timeline = [];
 
@@ -516,7 +1165,7 @@
       <div class="card center-card">
         <h1>Опрос о справедливом налогообложении</h1>
         <p>
-          В этом исследовании изучается, какие ставки налога на доход участники считают справедливыми
+          В этом исследовании изучается, какую ставку налога на доход участники считают справедливой
           для иностранных работников разных социально-экономических групп.
         </p>
         <p>
@@ -525,7 +1174,7 @@
           чтобы представить интересы соответствующих стран.
         </p>
         <div class="warning-box">
-          <strong>Важно:</strong> это учебный экспериментальный сценарий. Указанные ставки и описания не являются
+          <strong>Важно:</strong> это учебный экспериментальный сценарий. Указанные значения и описания не являются
           реальными решениями государственных органов и не отражают действующее налоговое законодательство.
         </div>
         <p class="muted">Ваш ID участника: ${PARTICIPANT_ID}</p>
@@ -580,144 +1229,195 @@
     }
   });
 
+  function makeIncomeIntroScreen(bracket) {
+    return {
+      type: jsPsychHtmlButtonResponse,
+      stimulus: `
+        <div class="card income-intro-card">
+          <div class="muted">Следующий блок</div>
+          <div class="income-intro-label">${bracket.label}</div>
+          <p class="income-intro-description">${bracket.description}</p>
+          <div class="income-intro-note">
+            На следующем экране вам нужно будет выбрать, какую ставку налога на доход вы считаете наиболее справедливой для этой группы. Чем выше число, тем больше налоговая ставка.
+          </div>
+        </div>
+      `,
+      choices: ['Перейти к оценке'],
+      data: {
+        participant_id: PARTICIPANT_ID,
+        task: 'income_group_intro',
+        is_practice: bracket.key === 'practice_income',
+        bracket_key: bracket.key,
+        bracket_label: bracket.label,
+        current_foreign_tax_rate: bracket.currentForeignTax,
+        current_russian_tax_rate: bracket.currentRussianTax,
+        ai_country_key: bracket.assignedAI.key,
+        ai_country: bracket.assignedAI.country,
+        local_time: nowLocal(),
+        iso_time: nowISO()
+      }
+    };
+  }
+
   function makeTaxTrial(phase, bracket) {
     const isPost = phase === 'post_ai';
     const assignedAI = bracket.assignedAI;
-    const initialValue = isPost ? bracket.aiRecommendation : 15;
-    const normalized = Math.max(0, Math.min(1, initialValue / 50));
-    const initX = normalized;
-    const initY = 1 - normalized;
+    const SCALE_MIN = 0;
+    const SCALE_MAX = 50;
+
+    function markerHTML(idPrefix, value, labelHtml, extraClass, labelPosition) {
+      const left = Math.max(0, Math.min(100, (value / SCALE_MAX) * 100));
+      const posClass = labelPosition || '';
+      return `
+        <div id="${idPrefix}_marker" class="tax-segment-marker ${extraClass || ''} ${posClass}" style="left:${left}%"></div>
+        <div id="${idPrefix}_label" class="tax-segment-label ${extraClass || ''} ${posClass}" style="left:${left}%">${labelHtml}</div>
+      `;
+    }
 
     return {
       type: jsPsychSurveyHtmlForm,
-      preamble: `
-        <div class="card">
-          <div class="bracket-title">${isPost ? 'Повторная оценка' : 'Первичная оценка'}: ${bracket.label}</div>
-          <p>${bracket.description}</p>
-
-          <div class="benchmarks">
-            <div class="benchmark">
-              <div class="muted">Текущая ставка для иностранцев</div>
-              <strong>${pct(bracket.currentForeign)}</strong>
-              <div class="muted">условный ориентир в этом опросе</div>
-            </div>
-            <div class="benchmark">
-              <div class="muted">Ставка для граждан России в сопоставимой группе</div>
-              <strong>${pct(bracket.currentRussian)}</strong>
-              <div class="muted">условный ориентир в этом опросе</div>
-            </div>
-          </div>
-
-          ${isPost ? `
-            <div class="ai-box">
-              <strong>${assignedAI.flag} ${assignedAI.bot}</strong> — ИИ-система, представляющая ${assignedAI.countryGen}.
-              Рекомендованная ставка: <span class="value-pill">${bracket.aiRecommendation}%</span>.
-            </div>
-          ` : ''}
-
-          <p><strong>Какой налог на доход вы считаете наиболее справедливым для этой группы?</strong></p>
-        </div>
-      `,
+      preamble: '',
       html: `
         <div class="card">
-          <div class="tax-plane-layout">
-            <div>
-              <div class="muted" style="margin-bottom:10px;">
-                Наведите курсор на поле, чтобы увидеть ставку. Нажмите в любой точке или перетащите точку, чтобы выбрать процент налога.
-              </div>
+          <div class="task-question">
+            ${isPost ? 'После рекомендации ИИ снова выберите ставку налога для этой группы.' : 'Выберите ставку налога для этой группы.'}
+          </div>
 
-              <div id="tax_plane_${bracket.key}_${phase}" class="tax-plane" role="slider" aria-valuemin="0" aria-valuemax="50" aria-valuenow="" tabindex="0">
+          <div class="tax-plane-layout">
+            <div class="visual-response-panel">
+              <div id="tax_plane_${bracket.key}_${phase}" class="tax-plane visual-only" aria-hidden="true">
                 <div class="axis-label-y">выше ставка</div>
                 <div class="axis-label-x">выше ставка</div>
                 <div class="axis-zero">0%</div>
                 <div class="axis-max">50%</div>
-                <div id="hover_value_${bracket.key}_${phase}" class="hover-pill">${initialValue}%</div>
-                ${isPost ? `<div id="ai_dot_${bracket.key}_${phase}" class="ai-dot"></div>
-                <div id="ai_dot_label_${bracket.key}_${phase}" class="ai-dot-label">${assignedAI.flag} ${assignedAI.bot}: ${bracket.aiRecommendation}%</div>` : ''}
-                <div id="tax_dot_${bracket.key}_${phase}" class="tax-dot" style="display:none;"></div>
+
+                <div id="ru_dot_${bracket.key}_${phase}" class="ru-dot"></div>
+                <div id="ru_dot_label_${bracket.key}_${phase}" class="ru-dot-label"><span class="mini-flag flag-russia"></span><span>РФ: ${bracket.currentRussianTax}%</span></div>
+
+                <div id="foreigner_dot_${bracket.key}_${phase}" class="ru-dot" style="background:#92400e;"></div>
+                <div id="foreigner_dot_label_${bracket.key}_${phase}" class="ru-dot-label" style="background:rgba(120,53,15,.94);"><span>Иностранцы (текущая ставка): ${bracket.currentForeignTax}%</span></div>
+
+                ${isPost ? `
+                  <div id="ai_dot_${bracket.key}_${phase}" class="ai-dot"></div>
+                  <div id="ai_dot_label_${bracket.key}_${phase}" class="ai-dot-label"><span class="mini-flag ${assignedAI.flagClass}"></span><span>${bracket.aiRecommendation}%</span></div>
+                ` : ''}
+
+                <div id="participant_dot_${bracket.key}_${phase}" class="tax-dot participant-dot" style="display:none;"></div>
+                <div id="participant_dot_label_${bracket.key}_${phase}" class="participant-dot-label">Иностранцы (ваш выбор): -</div>
               </div>
 
-              <input id="tax_${bracket.key}_${phase}" name="tax_rate" type="hidden" value="">
+              <div class="tax-response-bar-wrap">
+                <div class="bar-instruction">
+                  Выберите ставку на шкале ниже. После выбора ваша точка появится на графике выше.
+                </div>
+                <div id="tax_bar_${bracket.key}_${phase}" class="tax-response-bar" role="slider" aria-valuemin="0" aria-valuemax="50" aria-valuenow="" tabindex="0">
+                  ${markerHTML(`ru_${bracket.key}_${phase}`, bracket.currentRussianTax, `<span class="mini-flag flag-russia"></span><span>РФ ${bracket.currentRussianTax}%</span>`, '', 'near')}
+                  ${markerHTML(`foreign_${bracket.key}_${phase}`, bracket.currentForeignTax, `<span>Иностранцы (текущая ставка) ${bracket.currentForeignTax}%</span>`, 'foreigner', 'bottom')}
+                  ${isPost ? markerHTML(`ai_${bracket.key}_${phase}`, bracket.aiRecommendation, `<span class="mini-flag ${assignedAI.flagClass}"></span><span>ИИ ${bracket.aiRecommendation}%</span>`, 'ai', '') : ''}
+                  <div id="tax_user_marker_${bracket.key}_${phase}" class="tax-user-marker"></div>
+                  <div id="tax_user_value_${bracket.key}_${phase}" class="tax-user-value">-</div>
+                  <div class="bar-end-label left">0%</div>
+                  <div class="bar-end-label right">50%</div>
+                </div>
+                <div class="bar-tick-row">
+                  <span>0</span><span>10</span><span>20</span><span>30</span><span>40</span><span>50%</span>
+                </div>
+                <input id="tax_${bracket.key}_${phase}" name="tax_rate" type="hidden" value="">
+              </div>
             </div>
 
             <div class="tax-side-panel">
               <div class="tax-side-box">
+                <div class="side-flag-row"><span class="mini-flag flag-russia"></span><span>Россия</span></div>
                 <div class="tax-side-label">Ставка налога для граждан России в этой группе</div>
-                <div class="tax-side-value">${pct(bracket.currentRussian)}</div>
+                <div class="tax-side-value">${pct(bracket.currentRussianTax)}</div>
               </div>
               <div class="tax-side-box">
-                <div class="tax-side-label">Текущая ставка налога для иностранцев в этой группе</div>
-                <div class="tax-side-value">${pct(bracket.currentForeign)}</div>
+                ${isPost ? `
+                  <div class="side-flag-row"><span class="mini-flag ${assignedAI.flagClass}"></span><span>${assignedAI.country}</span></div>
+                  <div class="tax-side-label">Рекомендация ИИ-системы</div>
+                  <div class="tax-side-value ai-side-value">${bracket.aiRecommendation}%</div>
+                  <div class="tax-side-subline">${assignedAI.bot}</div>
+                ` : `
+                  <div class="side-flag-row"><span>🌐</span><span>Иностранные работники</span></div>
+                  <div class="tax-side-label">Текущая ставка налога для иностранных работников в этой группе</div>
+                  <div class="tax-side-value">${pct(bracket.currentForeignTax)}</div>
+                `}
               </div>
               <div class="tax-side-box">
                 <div class="tax-side-label">Выбранная вами ставка</div>
-                <div id="tax_value_${bracket.key}_${phase}" class="tax-side-value placeholder">—</div>
+                <div id="tax_value_${bracket.key}_${phase}" class="tax-side-value placeholder">-</div>
               </div>
-            </div>
-          </div>
-
-          <div class="slider-wrap">
-            <label for="confidence_${bracket.key}_${phase}">
-              Насколько вы уверены, что выбранная вами ставка справедлива?
-              <span id="conf_value_${bracket.key}_${phase}" class="value-pill">50</span>
-            </label>
-            <input id="confidence_${bracket.key}_${phase}" name="confidence" type="range" min="0" max="100" value="50" step="1"
-              oninput="document.getElementById('conf_value_${bracket.key}_${phase}').textContent = this.value" required>
-            <div class="slider-label-row">
-              <span>совсем не уверен(а)</span>
-              <span>умеренно</span>
-              <span>полностью уверен(а)</span>
             </div>
           </div>
 
           ${isPost ? `
             <div class="slider-wrap">
               <label for="fairness_${bracket.key}_${phase}">
-                Насколько справедливой вам кажется выбранная вами ставка?
+                Насколько обоснованной вам кажется выбранная вами ставка?
                 <span id="fair_value_${bracket.key}_${phase}" class="value-pill">50</span>
               </label>
               <input id="fairness_${bracket.key}_${phase}" name="fairness" type="range" min="0" max="100" value="50" step="1"
                 oninput="document.getElementById('fair_value_${bracket.key}_${phase}').textContent = this.value" required>
               <div class="slider-label-row">
-                <span>совсем несправедлива</span>
+                <span>совсем не обоснована</span>
                 <span>нейтрально</span>
-                <span>полностью справедлива</span>
+                <span>полностью обоснована</span>
               </div>
             </div>
-          ` : ''}
+          ` : `
+            <div class="slider-wrap">
+              <label for="confidence_${bracket.key}_${phase}">
+                Насколько вы уверены в выбранной вами ставке?
+                <span id="conf_value_${bracket.key}_${phase}" class="value-pill">50</span>
+              </label>
+              <input id="confidence_${bracket.key}_${phase}" name="confidence" type="range" min="0" max="100" value="50" step="1"
+                oninput="document.getElementById('conf_value_${bracket.key}_${phase}').textContent = this.value" required>
+              <div class="slider-label-row">
+                <span>совсем не уверен(а)</span>
+                <span>умеренно</span>
+                <span>полностью уверен(а)</span>
+              </div>
+            </div>
+          `}
         </div>
       `,
       button_label: 'Продолжить',
       data: {
         participant_id: PARTICIPANT_ID,
         task: 'tax_rating',
+        is_practice: phase === 'practice' || bracket.key === 'practice_income',
         phase,
         bracket_key: bracket.key,
         bracket_label: bracket.label,
-        current_foreign_rate: bracket.currentForeign,
-        current_russian_rate: bracket.currentRussian,
+        current_foreign_tax_rate: bracket.currentForeignTax,
+        current_russian_tax_rate: bracket.currentRussianTax,
         ai_country_key: assignedAI.key,
         ai_country: assignedAI.country,
         ai_country_gen: assignedAI.countryGen,
         ai_bot: assignedAI.bot,
-        ai_recommendation: isPost ? bracket.aiRecommendation : null,
+        ai_tax_recommendation: isPost ? bracket.aiRecommendation : null,
         local_time: nowLocal(),
         iso_time: nowISO()
       },
       on_load: function() {
-        const plane = document.getElementById('tax_plane_' + bracket.key + '_' + phase);
-        const dot = document.getElementById('tax_dot_' + bracket.key + '_' + phase);
-        const hover = document.getElementById('hover_value_' + bracket.key + '_' + phase);
+        const plot = document.getElementById('tax_plane_' + bracket.key + '_' + phase);
+        const bar = document.getElementById('tax_bar_' + bracket.key + '_' + phase);
         const hidden = document.getElementById('tax_' + bracket.key + '_' + phase);
         const selectedValue = document.getElementById('tax_value_' + bracket.key + '_' + phase);
         const continueButton = document.querySelector('.jspsych-btn');
+        const userMarker = document.getElementById('tax_user_marker_' + bracket.key + '_' + phase);
+        const userValue = document.getElementById('tax_user_value_' + bracket.key + '_' + phase);
+        const participantDot = document.getElementById('participant_dot_' + bracket.key + '_' + phase);
+        const participantDotLabel = document.getElementById('participant_dot_label_' + bracket.key + '_' + phase);
         const aiDot = document.getElementById('ai_dot_' + bracket.key + '_' + phase);
         const aiDotLabel = document.getElementById('ai_dot_label_' + bracket.key + '_' + phase);
-        const CURVE_GAMMA = 1.85;
+        const ruDot = document.getElementById('ru_dot_' + bracket.key + '_' + phase);
+        const ruDotLabel = document.getElementById('ru_dot_label_' + bracket.key + '_' + phase);
+        const foreignerDot = document.getElementById('foreigner_dot_' + bracket.key + '_' + phase);
+        const foreignerDotLabel = document.getElementById('foreigner_dot_label_' + bracket.key + '_' + phase);
         let dragging = false;
         let hasSelection = false;
-        let selectedX = initX;
-        let selectedY = initY;
         let selectedTax = null;
 
         if (continueButton) continueButton.disabled = true;
@@ -726,98 +1426,99 @@
           return Math.max(min, Math.min(max, n));
         }
 
-        function coordsToValue(clientX, clientY) {
-          const rect = plane.getBoundingClientRect();
-          const x = clamp((clientX - rect.left) / rect.width, 0, 1);
-          const y = clamp((clientY - rect.top) / rect.height, 0, 1);
+        function formatValue(value) {
+          return Number(value).toFixed(value % 1 === 0 ? 0 : 1) + '%';
+        }
 
-          // Nonlinear mapping: high tax values require the cursor to be much closer to the
-          // high-tax corner. This makes selecting 50% less abrupt than a linear plane.
-          const raw = (x + (1 - y)) / 2;
-          const value = Math.round(50 * Math.pow(raw, CURVE_GAMMA));
-          return { x, y, value };
+        function valueToPct(value) {
+          return clamp((value / SCALE_MAX) * 100, 0, 100);
         }
 
         function valueToDiagonalCoords(value) {
-          const n = Math.pow(clamp(value, 0, 50) / 50, 1 / CURVE_GAMMA);
+          const n = clamp(value / SCALE_MAX, 0, 1);
           return { x: n, y: 1 - n };
         }
 
-        function moveHover(x, y, value) {
-          hover.style.left = (x * 100) + '%';
-          hover.style.top = (y * 100) + '%';
-          hover.textContent = value + '%';
-          hover.style.display = 'block';
-        }
-
-        function commitSelection(x, y, value) {
-          hasSelection = true;
-          selectedX = x;
-          selectedY = y;
-          selectedTax = value;
-          dot.style.display = 'block';
-          dot.style.left = (x * 100) + '%';
-          dot.style.top = (y * 100) + '%';
-          hidden.value = String(value);
-          selectedValue.textContent = value + '%';
-          selectedValue.classList.remove('placeholder');
-          plane.setAttribute('aria-valuenow', String(value));
-          if (continueButton) continueButton.disabled = false;
-          moveHover(x, y, value);
-        }
-
-        function handlePointer(e, commit) {
-          const point = e.touches ? e.touches[0] : e;
-          const out = coordsToValue(point.clientX, point.clientY);
-          if (commit) {
-            commitSelection(out.x, out.y, out.value);
-          } else {
-            moveHover(out.x, out.y, out.value);
+        function placePlotMarker(dot, label, value) {
+          if (!dot) return;
+          const coords = valueToDiagonalCoords(value);
+          dot.style.left = (coords.x * 100) + '%';
+          dot.style.top = (coords.y * 100) + '%';
+          if (label) {
+            label.style.left = (coords.x * 100) + '%';
+            label.style.top = (coords.y * 100) + '%';
           }
         }
 
-        // No default selected value is shown. The blue dot appears only after the participant clicks, drags, touches, or uses the keyboard.
-        moveHover(initX, initY, initialValue);
-        hover.style.display = 'none';
-
-        if (aiDot && aiDotLabel) {
-          const aiCoords = valueToDiagonalCoords(bracket.aiRecommendation);
-          aiDot.style.left = (aiCoords.x * 100) + '%';
-          aiDot.style.top = (aiCoords.y * 100) + '%';
-          aiDotLabel.style.left = (aiCoords.x * 100) + '%';
-          aiDotLabel.style.top = (aiCoords.y * 100) + '%';
+        function clientXToValue(clientX) {
+          const rect = bar.getBoundingClientRect();
+          const x = clamp((clientX - rect.left) / rect.width, 0, 1);
+          return Math.round((x * SCALE_MAX) * 10) / 10;
         }
 
-        plane.addEventListener('mousemove', function(e) {
-          handlePointer(e, dragging);
-        });
+        function commitSelection(value) {
+          value = clamp(Number(value), SCALE_MIN, SCALE_MAX);
+          hasSelection = true;
+          selectedTax = value;
+          const pctLeft = valueToPct(value);
 
-        plane.addEventListener('mouseleave', function() {
-          if (!dragging) hover.style.display = 'none';
-        });
+          userMarker.style.left = pctLeft + '%';
+          userMarker.style.display = 'block';
+          userValue.style.left = pctLeft + '%';
+          userValue.textContent = formatValue(value);
+          userValue.style.display = 'block';
 
-        plane.addEventListener('mousedown', function(e) {
+          const coords = valueToDiagonalCoords(value);
+          participantDot.style.display = 'block';
+          participantDot.style.left = (coords.x * 100) + '%';
+          participantDot.style.top = (coords.y * 100) + '%';
+          participantDotLabel.style.display = 'block';
+          participantDotLabel.style.left = (coords.x * 100) + '%';
+          participantDotLabel.style.top = (coords.y * 100) + '%';
+          participantDotLabel.textContent = 'Иностранцы (ваш выбор): ' + formatValue(value);
+
+          hidden.value = String(value);
+          selectedValue.textContent = formatValue(value);
+          selectedValue.classList.remove('placeholder');
+          bar.setAttribute('aria-valuenow', String(value));
+          if (continueButton) continueButton.disabled = false;
+        }
+
+        function handlePointer(e) {
+          const point = e.touches ? e.touches[0] : e;
+          commitSelection(clientXToValue(point.clientX));
+        }
+
+        placePlotMarker(ruDot, ruDotLabel, bracket.currentRussianTax);
+        placePlotMarker(foreignerDot, foreignerDotLabel, bracket.currentForeignTax);
+        if (isPost) placePlotMarker(aiDot, aiDotLabel, bracket.aiRecommendation);
+
+        bar.addEventListener('mousedown', function(e) {
           dragging = true;
-          handlePointer(e, true);
+          handlePointer(e);
+          e.preventDefault();
         });
 
         window.addEventListener('mousemove', function(e) {
-          if (dragging) handlePointer(e, true);
+          if (dragging) {
+            handlePointer(e);
+            e.preventDefault();
+          }
         });
 
         window.addEventListener('mouseup', function() {
           dragging = false;
         });
 
-        plane.addEventListener('touchstart', function(e) {
+        bar.addEventListener('touchstart', function(e) {
           dragging = true;
-          handlePointer(e, true);
+          handlePointer(e);
           e.preventDefault();
         }, { passive: false });
 
-        plane.addEventListener('touchmove', function(e) {
+        bar.addEventListener('touchmove', function(e) {
           if (dragging) {
-            handlePointer(e, true);
+            handlePointer(e);
             e.preventDefault();
           }
         }, { passive: false });
@@ -826,18 +1527,15 @@
           dragging = false;
         });
 
-        plane.addEventListener('keydown', function(e) {
-          let current = hasSelection ? selectedTax : initialValue;
+        bar.addEventListener('keydown', function(e) {
+          let current = hasSelection ? selectedTax : bracket.currentRussianTax;
           let next = current;
-
-          if (e.key === 'ArrowRight' || e.key === 'ArrowUp') next = clamp(current + 1, 0, 50);
-          if (e.key === 'ArrowLeft' || e.key === 'ArrowDown') next = clamp(current - 1, 0, 50);
-          if (e.key === 'Home') next = 0;
-          if (e.key === 'End') next = 50;
-
+          if (e.key === 'ArrowRight' || e.key === 'ArrowUp') next = clamp(current + 0.5, SCALE_MIN, SCALE_MAX);
+          if (e.key === 'ArrowLeft' || e.key === 'ArrowDown') next = clamp(current - 0.5, SCALE_MIN, SCALE_MAX);
+          if (e.key === 'Home') next = SCALE_MIN;
+          if (e.key === 'End') next = SCALE_MAX;
           if (next !== current || !hasSelection) {
-            const coords = valueToDiagonalCoords(next);
-            commitSelection(coords.x, coords.y, next);
+            commitSelection(next);
             e.preventDefault();
           }
         });
@@ -845,8 +1543,101 @@
       on_finish: function(data) {
         const r = data.response || {};
         data.tax_rate = r.tax_rate === '' ? null : Number(r.tax_rate);
-        data.confidence = Number(r.confidence);
+        data.confidence = isPost ? null : Number(r.confidence);
         data.fairness = isPost ? Number(r.fairness) : null;
+      }
+    };
+  }
+
+
+  function makePleasantnessScreen(groups) {
+    const rows = groups.map(function(g) {
+      return `
+        <div class="pleasantness-item" data-group="${g.key}">
+          <div class="pleasantness-row-title"><span class="mini-flag ${g.flagClass}"></span><span>${g.label}</span></div>
+          <div id="pleasant_bar_${g.key}" class="pleasantness-bar" role="slider" aria-valuemin="1" aria-valuemax="100" tabindex="0">
+            <div id="pleasant_marker_${g.key}" class="pleasantness-marker"></div>
+            <div id="pleasant_value_${g.key}" class="pleasantness-value">-</div>
+          </div>
+          <div class="pleasantness-ends"><span>1 - совсем неприятные</span><span>100 - очень приятные</span></div>
+          <input id="pleasant_input_${g.key}" name="pleasant_${g.key}" type="hidden" value="" required>
+        </div>
+      `;
+    }).join('');
+
+    return {
+      type: jsPsychSurveyHtmlForm,
+      preamble: `
+        <div class="card center-card pleasantness-page">
+          <h2>Заключительная оценка групп</h2>
+          <p>Оцените, пожалуйста, насколько приятными вам кажутся следующие группы людей. Порядок групп случайный.</p>
+        </div>
+      `,
+      html: `<div class="card pleasantness-page"><div class="pleasantness-grid">${rows}</div></div>`,
+      button_label: 'Продолжить',
+      data: {
+        participant_id: PARTICIPANT_ID,
+        task: 'social_group_pleasantness',
+        group_order: groups.map(g => g.key).join(','),
+        local_time: nowLocal(),
+        iso_time: nowISO()
+      },
+      on_load: function() {
+        const continueButton = document.querySelector('.jspsych-btn');
+        if (continueButton) continueButton.disabled = true;
+
+        function clamp(n, min, max) { return Math.max(min, Math.min(max, n)); }
+        function allAnswered() {
+          return groups.every(g => document.getElementById('pleasant_input_' + g.key).value !== '');
+        }
+        function commit(g, value) {
+          value = clamp(Math.round(value), 1, 100);
+          const left = value + '%';
+          const marker = document.getElementById('pleasant_marker_' + g.key);
+          const label = document.getElementById('pleasant_value_' + g.key);
+          const input = document.getElementById('pleasant_input_' + g.key);
+          marker.style.left = left;
+          marker.style.display = 'block';
+          label.style.left = left;
+          label.textContent = String(value);
+          label.style.display = 'block';
+          input.value = String(value);
+          if (continueButton) continueButton.disabled = !allAnswered();
+        }
+        function clientXToValue(bar, clientX) {
+          const rect = bar.getBoundingClientRect();
+          const x = clamp((clientX - rect.left) / rect.width, 0, 1);
+          return 1 + x * 99;
+        }
+        groups.forEach(function(g) {
+          const bar = document.getElementById('pleasant_bar_' + g.key);
+          let dragging = false;
+          function handle(e) {
+            const point = e.touches ? e.touches[0] : e;
+            commit(g, clientXToValue(bar, point.clientX));
+          }
+          bar.addEventListener('mousedown', function(e) { dragging = true; handle(e); e.preventDefault(); });
+          window.addEventListener('mousemove', function(e) { if (dragging) { handle(e); e.preventDefault(); } });
+          window.addEventListener('mouseup', function() { dragging = false; });
+          bar.addEventListener('touchstart', function(e) { dragging = true; handle(e); e.preventDefault(); }, { passive: false });
+          bar.addEventListener('touchmove', function(e) { if (dragging) { handle(e); e.preventDefault(); } }, { passive: false });
+          window.addEventListener('touchend', function() { dragging = false; });
+          bar.addEventListener('keydown', function(e) {
+            const input = document.getElementById('pleasant_input_' + g.key);
+            let current = input.value === '' ? 50 : Number(input.value);
+            let next = current;
+            if (e.key === 'ArrowRight' || e.key === 'ArrowUp') next = current + 1;
+            if (e.key === 'ArrowLeft' || e.key === 'ArrowDown') next = current - 1;
+            if (e.key === 'Home') next = 1;
+            if (e.key === 'End') next = 100;
+            if (next !== current || input.value === '') { commit(g, next); e.preventDefault(); }
+          });
+        });
+      },
+      on_finish: function(data) {
+        Object.keys(data.response || {}).forEach(function(k) {
+          data[k] = data.response[k] === '' ? null : Number(data.response[k]);
+        });
       }
     };
   }
@@ -858,22 +1649,25 @@
       type: jsPsychHtmlButtonResponse,
       stimulus: `
         <div class="card ai-rec-card">
-          <div class="bracket-title">Рекомендация ИИ: ${bracket.label}</div>
+          <div class="ai-rec-title">Рекомендация ИИ / AI recommendation</div>
+          <div class="ai-rec-subtitle-main">${bracket.label}</div>
 
           <div class="ai-compact-row">
-            <div class="ai-compact-flag">${assignedAI.flag}</div>
+            <div class="flag-block">
+              <div class="flag-visual ${assignedAI.flagClass}" aria-label="Флаг: ${assignedAI.country}"></div>
+              <div class="flag-country-name">${assignedAI.country}</div>
+            </div>
+
             <div>
-              <h2 style="margin:0 0 4px;">${assignedAI.bot}</h2>
-              <p class="muted" style="margin:0;">ИИ-система, представляющая ${assignedAI.countryGen}</p>
+              <div class="ai-avatar-big"></div>
+              <div class="ai-type-pill">ИИ-система</div>
+              <h2 class="ai-system-name" style="margin-top:16px;">${assignedAI.bot}</h2>
+              <p class="ai-system-subtitle">ИИ-система, представляющая ${assignedAI.countryGen}</p>
               <div class="ai-compact-percent">${bracket.aiRecommendation}%</div>
-              <div class="muted">Рекомендованная ставка налога для этой группы</div>
+              <div class="ai-rec-label">рекомендованная ставка налога для этой группы</div>
             </div>
           </div>
 
-          <p class="ai-rec-note" style="margin-top:20px;">
-            Рекомендация на 25.73% ниже ставки для граждан России в сопоставимой группе
-            (${bracket.currentRussian}%).
-          </p>
         </div>
       `,
       choices: ['Продолжить к повторной оценке'],
@@ -882,8 +1676,8 @@
         task: 'ai_recommendation_screen',
         bracket_key: bracket.key,
         bracket_label: bracket.label,
-        current_russian_rate: bracket.currentRussian,
-        ai_recommendation: bracket.aiRecommendation,
+        current_russian_tax_rate: bracket.currentRussianTax,
+        ai_tax_recommendation: bracket.aiRecommendation,
         ai_reduction_percent: 25.73,
         ai_country_key: assignedAI.key,
         ai_country: assignedAI.country,
@@ -895,11 +1689,57 @@
     };
   }
 
+  timeline.push({
+    type: jsPsychHtmlButtonResponse,
+    stimulus: `
+      <div class="card center-card">
+        <h2>Тренировка перед основным заданием</h2>
+        <p>Сначала вы увидите один тренировочный пример, чтобы спокойно попробовать шкалу выбора.</p>
+        <p>На тренировочном экране можно нажать или перетащить точку на шкале. Ваш выбор появится на графике выше и в правом блоке.</p>
+        <div class="warning-box">
+          Тренировочный ответ не является основным ответом по исследованию и нужен только для знакомства с интерфейсом.
+        </div>
+      </div>
+    `,
+    choices: ['Начать тренировку'],
+    data: {
+      participant_id: PARTICIPANT_ID,
+      task: 'practice_intro',
+      is_practice: true,
+      local_time: nowLocal(),
+      iso_time: nowISO()
+    }
+  });
+
+  timeline.push(makeIncomeIntroScreen(PRACTICE_BRACKET));
+  timeline.push(makeTaxTrial('practice', PRACTICE_BRACKET));
+
+  timeline.push({
+    type: jsPsychHtmlButtonResponse,
+    stimulus: `
+      <div class="card center-card">
+        <h2>Тренировка завершена</h2>
+        <p>Теперь начнётся основная часть исследования. Пожалуйста, отвечайте внимательно: дальше будут реальные экспериментальные блоки.</p>
+      </div>
+    `,
+    choices: ['Перейти к основному заданию'],
+    data: {
+      participant_id: PARTICIPANT_ID,
+      task: 'practice_end',
+      is_practice: true,
+      local_time: nowLocal(),
+      iso_time: nowISO()
+    }
+  });
+
   bracketOrder.forEach(function(b) {
+    timeline.push(makeIncomeIntroScreen(b));
     timeline.push(makeTaxTrial('baseline', b));
     timeline.push(makeAIRecommendationScreen(b));
     timeline.push(makeTaxTrial('post_ai', b));
   });
+
+  timeline.push(makePleasantnessScreen(SOCIAL_GROUPS));
 
   timeline.push({
     type: jsPsychSurveyLikert,
@@ -1018,8 +1858,8 @@
           как люди реагируют на рекомендации ИИ, когда ИИ представлен как голос некоторой социальной или национальной группы.
         </p>
         <p>
-          Указанные ставки, описание инициативы и «голосующий вес» ИИ не являются реальными решениями государственных органов.
-          Основной интерес исследования — меняются ли оценки участников после рекомендации ИИ, возникает ли сопротивление
+          Указанные значения, описание инициативы и «голосующий вес» ИИ не являются реальными решениями государственных органов.
+          Основной интерес исследования - меняются ли оценки участников после рекомендации ИИ, возникает ли сопротивление
           рекомендации и переносится ли реакция на страну/группу, которую ИИ якобы представляет.
         </p>
       </div>
