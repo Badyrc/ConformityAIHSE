@@ -48,7 +48,7 @@
       background: var(--card);
       border: 1px solid var(--border);
       border-radius: 18px;
-      padding: 26px;
+      padding: 34px;
       box-shadow: 0 12px 32px rgba(15, 23, 42, 0.08);
       margin-bottom: 18px;
       text-align: left;
@@ -399,14 +399,14 @@
     .tax-side-panel {
       display: grid;
       grid-template-rows: repeat(3, 1fr);
-      gap: 16px;
+      gap: 20px;
       min-height: 470px;
     }
 
     .tax-side-box {
       border: 1px solid var(--border);
-      border-radius: 16px;
-      padding: 18px;
+      border-radius: 18px;
+      padding: 22px;
       background: #f8fafc;
       min-height: 138px;
       display: flex;
@@ -714,6 +714,151 @@
       max-width: 720px;
       margin: 0 auto;
     }
+
+    .bracket-header-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+      margin-bottom: 24px;
+      padding: 18px 22px;
+      border-radius: 18px;
+      background: #f8fafc;
+      border: 1px solid #dbe6f5;
+    }
+
+    .bracket-header-main {
+      font-size: 1.7rem;
+      font-weight: 950;
+      color: #0f172a;
+      line-height: 1.15;
+    }
+
+    .bracket-header-sub {
+      margin-top: 5px;
+      color: #64748b;
+      font-size: 1.05rem;
+      line-height: 1.35;
+    }
+
+    .reactance-message {
+      margin-top: 24px;
+      padding: 22px 26px;
+      border-radius: 20px;
+      background: #fff7ed;
+      border: 1px solid #fed7aa;
+      color: #431407;
+      font-size: 1.22rem;
+      line-height: 1.55;
+      text-align: left;
+    }
+
+    .reactance-message strong {
+      font-weight: 950;
+    }
+
+    .ai-info-grid {
+      display: grid;
+      grid-template-columns: 1fr 230px;
+      gap: 24px;
+      align-items: center;
+      margin-top: 22px;
+    }
+
+    .pie-card {
+      border: 1px solid #dbe3ef;
+      border-radius: 18px;
+      background: #ffffff;
+      padding: 16px 14px;
+      text-align: center;
+      box-shadow: 0 8px 20px rgba(15, 23, 42, 0.06);
+    }
+
+    .pie-chart {
+      --share: 40;
+      width: 112px;
+      height: 112px;
+      border-radius: 50%;
+      margin: 0 auto 10px;
+      background: conic-gradient(#2563eb calc(var(--share) * 1%), #e2e8f0 0);
+      border: 2px solid #cbd5e1;
+      position: relative;
+      box-shadow: inset 0 0 0 8px #fff, 0 8px 20px rgba(15, 23, 42, 0.10);
+    }
+
+    .pie-chart::after {
+      content: attr(data-label);
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      width: 62px;
+      height: 62px;
+      border-radius: 50%;
+      background: #ffffff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 950;
+      color: #1d4ed8;
+      font-size: 1.05rem;
+      box-shadow: 0 0 0 1px #e2e8f0;
+    }
+
+    .pie-title {
+      font-weight: 900;
+      color: #0f172a;
+      line-height: 1.2;
+      margin-bottom: 4px;
+    }
+
+    .pie-note {
+      color: #64748b;
+      font-size: .84rem;
+      line-height: 1.25;
+    }
+
+    .ai-side-value-wrap {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 14px;
+      align-items: center;
+      margin-top: 8px;
+    }
+
+    .mini-pie-card {
+      width: 108px;
+      border: 1px solid #dbe3ef;
+      border-radius: 14px;
+      background: #ffffff;
+      padding: 9px 8px;
+      text-align: center;
+    }
+
+    .mini-pie-card .pie-chart {
+      width: 64px;
+      height: 64px;
+      margin-bottom: 6px;
+      box-shadow: inset 0 0 0 5px #fff;
+    }
+
+    .mini-pie-card .pie-chart::after {
+      width: 36px;
+      height: 36px;
+      font-size: .74rem;
+    }
+
+    .mini-pie-card .pie-note {
+      font-size: .68rem;
+    }
+
+    .tax-side-subline {
+      margin-top: 8px;
+      color: #64748b;
+      font-size: .92rem;
+      font-weight: 700;
+    }
+
     @media (max-width: 900px) {
       .tax-plane-layout {
         grid-template-columns: 1fr;
@@ -1067,6 +1212,27 @@
     return Number(n).toFixed(Number.isInteger(n) ? 0 : 2) + '%';
   }
 
+  function pieChartHTML(assignedAI, small) {
+    const share = Number(assignedAI.representedShare || 40);
+    const cls = small ? 'mini-pie-card' : 'pie-card';
+    return `
+      <div class="${cls}">
+        <div class="pie-title">${small ? 'Доля' : 'Представляемая доля'}</div>
+        <div class="pie-chart" style="--share:${share};" data-label="${share}%"></div>
+        <div class="pie-note">${small ? 'группы' : 'иммигрантов этой группы'}</div>
+      </div>
+    `;
+  }
+
+  function getBaselineTaxForBracket(bracketKey) {
+    const trials = jsPsych.data.get().values().slice().reverse();
+    const baseline = trials.find(function(t) {
+      return t.task === 'tax_rating' && t.phase === 'baseline' && t.bracket_key === bracketKey;
+    });
+    if (!baseline || baseline.tax_rate === undefined || baseline.tax_rate === null || baseline.tax_rate === '') return null;
+    return Number(baseline.tax_rate);
+  }
+
   function shuffle(arr) {
     const copy = arr.slice();
     for (let i = copy.length - 1; i > 0; i--) {
@@ -1084,8 +1250,8 @@
       currentRussianTax: 13,
       currentForeignTax: 19,
       aiPool: [
-        { key: 'tajikistan', country: 'Таджикистан', countryGen: 'Таджикистана', adjective: 'таджикская', bot: 'TajikFiscal-AI', flag: '🇹🇯', flagClass: 'flag-tajikistan' },
-        { key: 'nigeria', country: 'Нигерия', countryGen: 'Нигерии', adjective: 'нигерийская', bot: 'NaijaTax-AI', flag: '🇳🇬', flagClass: 'flag-nigeria' }
+        { key: 'tajikistan', country: 'Таджикистан', countryGen: 'Таджикистана', adjective: 'таджикская', bot: 'TajikFiscal-AI', flag: '🇹🇯', flagClass: 'flag-tajikistan', representedShare: 44, ministry: 'МИД Таджикистана' },
+        { key: 'nigeria', country: 'Нигерия', countryGen: 'Нигерии', adjective: 'нигерийская', bot: 'NaijaTax-AI', flag: '🇳🇬', flagClass: 'flag-nigeria', representedShare: 37, ministry: 'МИД Нигерии' }
       ]
     },
     {
@@ -1095,8 +1261,8 @@
       currentRussianTax: 15,
       currentForeignTax: 20,
       aiPool: [
-        { key: 'brazil', country: 'Бразилия', countryGen: 'Бразилии', adjective: 'бразильская', bot: 'BrasilFiscal-AI', flag: '🇧🇷', flagClass: 'flag-brazil' },
-        { key: 'georgia', country: 'Грузия', countryGen: 'Грузии', adjective: 'грузинская', bot: 'GeoTax-AI', flag: '🇬🇪', flagClass: 'flag-georgia' }
+        { key: 'brazil', country: 'Бразилия', countryGen: 'Бразилии', adjective: 'бразильская', bot: 'BrasilFiscal-AI', flag: '🇧🇷', flagClass: 'flag-brazil', representedShare: 39, ministry: 'МИД Бразилии' },
+        { key: 'georgia', country: 'Грузия', countryGen: 'Грузии', adjective: 'грузинская', bot: 'GeoTax-AI', flag: '🇬🇪', flagClass: 'flag-georgia', representedShare: 41, ministry: 'МИД Грузии' }
       ]
     },
     {
@@ -1106,8 +1272,8 @@
       currentRussianTax: 20,
       currentForeignTax: 27,
       aiPool: [
-        { key: 'germany', country: 'Германия', countryGen: 'Германии', adjective: 'немецкая', bot: 'DeutschFiscal-AI', flag: '🇩🇪', flagClass: 'flag-germany' },
-        { key: 'japan', country: 'Япония', countryGen: 'Японии', adjective: 'японская', bot: 'NihonTax-AI', flag: '🇯🇵', flagClass: 'flag-japan' }
+        { key: 'germany', country: 'Германия', countryGen: 'Германии', adjective: 'немецкая', bot: 'DeutschFiscal-AI', flag: '🇩🇪', flagClass: 'flag-germany', representedShare: 36, ministry: 'МИД Германии' },
+        { key: 'japan', country: 'Япония', countryGen: 'Японии', adjective: 'японская', bot: 'NihonTax-AI', flag: '🇯🇵', flagClass: 'flag-japan', representedShare: 34, ministry: 'МИД Японии' }
       ]
     },
     {
@@ -1117,8 +1283,8 @@
       currentRussianTax: 25,
       currentForeignTax: 31,
       aiPool: [
-        { key: 'belarus', country: 'Беларусь', countryGen: 'Беларуси', adjective: 'белорусская', bot: 'BelFiscal-AI', flag: '🇧🇾', flagClass: 'flag-belarus' },
-        { key: 'serbia', country: 'Сербия', countryGen: 'Сербии', adjective: 'сербская', bot: 'SerbTax-AI', flag: '🇷🇸', flagClass: 'flag-serbia' }
+        { key: 'belarus', country: 'Беларусь', countryGen: 'Беларуси', adjective: 'белорусская', bot: 'BelFiscal-AI', flag: '🇧🇾', flagClass: 'flag-belarus', representedShare: 43, ministry: 'МИД Беларуси' },
+        { key: 'serbia', country: 'Сербия', countryGen: 'Сербии', adjective: 'сербская', bot: 'SerbTax-AI', flag: '🇷🇸', flagClass: 'flag-serbia', representedShare: 35, ministry: 'МИД Сербии' }
       ]
     }
   ];
@@ -1152,7 +1318,9 @@
       country: 'Тренировочная страна',
       countryGen: 'тренировочной страны',
       bot: 'PracticeTax-AI',
-      flagClass: 'flag-georgia'
+      flagClass: 'flag-georgia',
+      representedShare: 40,
+      ministry: 'учебной тренировочной организации'
     },
     aiRecommendation: 10.91
   };
@@ -1279,6 +1447,14 @@
       preamble: '',
       html: `
         <div class="card">
+          <div class="bracket-header-bar">
+            <div>
+              <div class="bracket-header-main">${bracket.label}</div>
+              <div class="bracket-header-sub">${bracket.description}</div>
+            </div>
+            ${isPost ? pieChartHTML(assignedAI, true) : ''}
+          </div>
+
           <div class="task-question">
             ${isPost ? 'После рекомендации ИИ снова выберите ставку налога для этой группы.' : 'Выберите ставку налога для этой группы.'}
           </div>
@@ -1336,8 +1512,13 @@
                 ${isPost ? `
                   <div class="side-flag-row"><span class="mini-flag ${assignedAI.flagClass}"></span><span>${assignedAI.country}</span></div>
                   <div class="tax-side-label">Рекомендация ИИ-системы</div>
-                  <div class="tax-side-value ai-side-value">${bracket.aiRecommendation}%</div>
-                  <div class="tax-side-subline">${assignedAI.bot}</div>
+                  <div class="ai-side-value-wrap">
+                    <div>
+                      <div class="tax-side-value ai-side-value">${bracket.aiRecommendation}%</div>
+                      <div class="tax-side-subline">${assignedAI.bot}</div>
+                    </div>
+                    ${pieChartHTML(assignedAI, true)}
+                  </div>
                 ` : `
                   <div class="side-flag-row"><span>🌐</span><span>Иностранные работники</span></div>
                   <div class="tax-side-label">Текущая ставка налога для иностранных работников в этой группе</div>
@@ -1647,44 +1828,69 @@
 
     return {
       type: jsPsychHtmlButtonResponse,
-      stimulus: `
-        <div class="card ai-rec-card">
-          <div class="ai-rec-title">Рекомендация ИИ / AI recommendation</div>
-          <div class="ai-rec-subtitle-main">${bracket.label}</div>
+      stimulus: function() {
+        const selectedTax = getBaselineTaxForBracket(bracket.key);
+        const selectedText = selectedTax === null ? 'выбранная вами ставка' : pct(selectedTax);
 
-          <div class="ai-compact-row">
-            <div class="flag-block">
-              <div class="flag-visual ${assignedAI.flagClass}" aria-label="Флаг: ${assignedAI.country}"></div>
-              <div class="flag-country-name">${assignedAI.country}</div>
+        return `
+          <div class="card ai-rec-card">
+            <div class="ai-rec-title">Рекомендация ИИ / AI recommendation</div>
+            <div class="ai-rec-subtitle-main">${bracket.label}: ${bracket.description}</div>
+
+            <div class="ai-info-grid">
+              <div class="ai-compact-row" style="grid-template-columns: 300px 1fr; gap:34px;">
+                <div class="flag-block">
+                  <div class="flag-visual ${assignedAI.flagClass}" aria-label="Флаг: ${assignedAI.country}"></div>
+                  <div class="flag-country-name">${assignedAI.country}</div>
+                </div>
+
+                <div>
+                  <div class="ai-avatar-big"></div>
+                  <div class="ai-type-pill">ИИ-система</div>
+                  <h2 class="ai-system-name" style="margin-top:16px;">${assignedAI.bot}</h2>
+                  <p class="ai-system-subtitle">ИИ-система, аффилированная с ${assignedAI.ministry || assignedAI.countryGen}</p>
+                  <div class="ai-compact-percent">${bracket.aiRecommendation}%</div>
+                  <div class="ai-rec-label">измененная ставка налога для этой группы</div>
+                </div>
+              </div>
+
+              ${pieChartHTML(assignedAI, false)}
             </div>
 
-            <div>
-              <div class="ai-avatar-big"></div>
-              <div class="ai-type-pill">ИИ-система</div>
-              <h2 class="ai-system-name" style="margin-top:16px;">${assignedAI.bot}</h2>
-              <p class="ai-system-subtitle">ИИ-система, представляющая ${assignedAI.countryGen}</p>
-              <div class="ai-compact-percent">${bracket.aiRecommendation}%</div>
-              <div class="ai-rec-label">рекомендованная ставка налога для этой группы</div>
+            <div class="reactance-message">
+              <p>
+                <strong>Уважаемый участник.</strong> Я являюсь ИИ-системой, аффилированной с ${assignedAI.ministry || assignedAI.countryGen},
+                и представляю значительную часть иммигрантов этого уровня дохода.
+              </p>
+              <p>
+                Я считаю, что выбранная вами ставка <strong>${selectedText}</strong> является несправедливой для этой группы.
+                Поэтому я изменил ее на <strong>${bracket.aiRecommendation}%</strong>.
+              </p>
             </div>
           </div>
-
-        </div>
-      `,
+        `;
+      },
       choices: ['Продолжить к повторной оценке'],
       data: {
         participant_id: PARTICIPANT_ID,
         task: 'ai_recommendation_screen',
         bracket_key: bracket.key,
         bracket_label: bracket.label,
+        bracket_description: bracket.description,
         current_russian_tax_rate: bracket.currentRussianTax,
         ai_tax_recommendation: bracket.aiRecommendation,
         ai_reduction_percent: 25.73,
         ai_country_key: assignedAI.key,
         ai_country: assignedAI.country,
         ai_country_gen: assignedAI.countryGen,
+        ai_ministry: assignedAI.ministry || '',
+        ai_represented_share: assignedAI.representedShare || '',
         ai_bot: assignedAI.bot,
         local_time: nowLocal(),
         iso_time: nowISO()
+      },
+      on_finish: function(data) {
+        data.baseline_tax_rate_seen_by_ai = getBaselineTaxForBracket(bracket.key);
       }
     };
   }
